@@ -8,6 +8,8 @@ import { FooterComponent } from './footer/footer.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { OrderComponent } from './order/order.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -16,13 +18,15 @@ import { OrderConfirmationComponent } from './order-confirmation/order-confirmat
     FooterComponent,
     ProductDetailComponent,
     OrderComponent,
-    OrderConfirmationComponent
+    OrderConfirmationComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule
   ],
   providers: [],
-  bootstrap: [OrderConfirmationComponent]
+  bootstrap: [RegisterComponent]
 })
 export class AppModule { }
