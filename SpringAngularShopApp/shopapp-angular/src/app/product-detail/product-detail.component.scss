@@ -1,0 +1,11 @@
+/* Custom styles for thumbnail indicators */
+.carousel-indicators [data-bs-target] {
+  border: 1px solid #fff;
+  background-size: cover;
+  width: 60px;
+  height: auto;
+}
+.carousel-indicators img {
+  display: block;
+  width: 100%;
+}
