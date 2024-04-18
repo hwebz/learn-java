@@ -1,4 +1,4 @@
-CREATE DATABASE shopapp;
+-- CREATE DATABASE shopapp;
 USE shopapp;
 
 CREATE TABLE users(
@@ -11,7 +11,7 @@ CREATE TABLE users(
   updated_at DATETIME,
   is_active TINYINT DEFAULT 1,
   facebook_account_id INT DEFAULT 0,
-  google_account_id INT DEFAULT 0,
+  google_account_id INT DEFAULT 0
 );
 
 CREATE TABLE tokens(
@@ -22,7 +22,7 @@ CREATE TABLE tokens(
   revoked TINYINT(1) NOT NULL,
   expired TINYINT(1) NOT NULL,
   user_id INT,
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE social_accounts(
@@ -31,12 +31,12 @@ CREATE TABLE social_accounts(
   provider_id VARCHAR(50) NOT NULL,
   email VARCHAR(150) NOT NULL COMMENT 'Email address of the user',
   name VARCHAR(100) NOT NULL COMMENT 'Full name of the user',
-  user_id INT,
+  user_id INT
 );
 
 CREATE TABLE categories(
   id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'Cateegory name',
+  name VARCHAR(100) NOT NULL DEFAULT '' COMMENT 'Cateegory name'
 );
 
 CREATE TABLE products(
@@ -48,7 +48,7 @@ CREATE TABLE products(
   created_at DATETIME,
   updated_at DATETIME,
   category_id INT,
-  FOREIGN KEY (category_id) REFERENCES categories(id),
+  FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE TABLE orders(
@@ -61,14 +61,14 @@ CREATE TABLE orders(
   address VARCHAR(200) NOT NULL,
   note VARCHAR(100) DEFAULT '',
   order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-  status ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled') COMMENT 'Order status'
+  status ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled') COMMENT 'Order status',
   total_money FLOAT CHECK(total_money >= 0),
   shipping_method VARCHAR(100),
   shipping_address VARCHAR(200),
   shipping_date DATETIME,
   tracking_number VARCHAR(100),
   payment_method VARCHAR(100),
-  active TINYINT DEFAULT 1,
+  active TINYINT DEFAULT 1
 );
 
 CREATE TABLE order_details(
@@ -81,4 +81,4 @@ CREATE TABLE order_details(
   number_of_products INT CHECK(number_of_products > 0),
   total_money FLOAT CHECK(total_money >= 0),
   color VARCHAR(20) DEFAULT ''
-)
+);
