@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  angular-app:
+    image: node:14-alpine
+    container_name: angular-app
+    volumes:
+      - ./shopapp-angular:/app
+    working_dir: /app
+    command: sh -c "npm install && ng serve --host 0.0.0.0 --port 4200"
+    ports:
+      - "4200:4200"
+    depends_on:
+      - spring-api
+
+  spring-api:
+    image: openjdk:11-jre-slim
+    container_name: spring-api
+    volumes:
+      - ./shopapp-backend:/app
+    working_dir: /app
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/shopapp
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_REDIS_HOST=redis-server
+      - SPRING_REDIS_PORT=6379
+    command: sh -c "./mvnw spring-boot:run"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-db
+      - redis-server
+
+  mysql-db:
+    image: mysql:5.7
+    container_name: mysql-db
+    environment:
+      MYSQL_DATABASE: shopapp
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+  redis-server:
+    image: redis:6-alpine
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql-db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql-db
+
+volumes:
+  mysql-data:
