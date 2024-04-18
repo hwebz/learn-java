@@ -3,6 +3,7 @@ version: '3.8'
 services:
   angular-app:
     image: node:14-alpine
+    platform: linux/amd64
     container_name: angular-app
     volumes:
       - ./shopapp-angular:/app
@@ -15,6 +16,7 @@ services:
 
   spring-api:
     image: openjdk:11-jre-slim
+    platform: linux/amd64
     container_name: spring-api
     volumes:
       - ./shopapp-backend:/app
@@ -34,6 +36,7 @@ services:
 
   mysql-db:
     image: mysql:5.7
+    platform: linux/amd64
     container_name: mysql-db
     environment:
       MYSQL_DATABASE: shopapp
@@ -52,6 +55,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
     container_name: phpmyadmin
     environment:
       PMA_HOST: mysql-db
