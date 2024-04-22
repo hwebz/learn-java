@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.Console;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,31 +45,42 @@ public class ProductController {
             @Valid @ModelAttribute ProductDTO productDTO,
             BindingResult result
     ) {
-        if (result.hasErrors()) {
-            List<String> errorMessages = result.getFieldErrors().stream()
-                    .map(FieldError::getDefaultMessage)
-                    .toList();
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
+        try {
+            if (result.hasErrors()) {
+                List<String> errorMessages = result.getFieldErrors().stream()
+                        .map(FieldError::getDefaultMessage)
+                        .toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
 
-        MultipartFile file = productDTO.getFile();
-        if (file != null) {
-            // > 10MB
-            if (file.getSize() > 10 * 1024 * 1024) {
-                return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File is too large! Maximum size is 10MB");
+            List<MultipartFile> files = productDTO.getFiles();
+            files = files == null ? new ArrayList<>() : files;
+            for (MultipartFile file: files) {
+                if (file != null) {
+                    // Ignore the case of there is no files passed
+                    if (file.getSize() == 0) {
+                        continue;
+                    }
+                    // > 10MB
+                    if (file.getSize() > 10 * 1024 * 1024) {
+                        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File is too large! Maximum size is 10MB");
+                    }
+                    String contentType = file.getContentType();
+                    if (contentType == null || !contentType.startsWith("image/")) {
+                        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File is not an image");
+                    }
+                    try {
+                        String fileName = uploadFile(file);
+                    } catch (IOException e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+                    }
+                }
             }
-            String contentType = file.getContentType();
-            if (contentType == null || !contentType.startsWith("image/")) {
-                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body("File is not an image");
-            }
-            try {
-                String fileName = uploadFile(file);
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-            }
-        }
 
-        return ResponseEntity.ok("Add Product");
+            return ResponseEntity.ok("Product created successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     private String uploadFile(MultipartFile file) throws IOException {
