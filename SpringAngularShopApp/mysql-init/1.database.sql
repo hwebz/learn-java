@@ -11,7 +11,8 @@ CREATE TABLE users(
   updated_at DATETIME,
   is_active TINYINT DEFAULT 1,
   facebook_account_id INT DEFAULT 0,
-  google_account_id INT DEFAULT 0
+  google_account_id INT DEFAULT 0,
+  role_id INT DEFAULT 2
 );
 
 CREATE TABLE tokens(
