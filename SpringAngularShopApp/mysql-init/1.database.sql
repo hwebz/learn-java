@@ -1,6 +1,11 @@
 -- CREATE DATABASE shopapp;
 USE shopapp;
 
+CREATE TABLE roles(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(20) NOT NULL
+);
+
 CREATE TABLE users(
   id INT PRIMARY KEY AUTO_INCREMENT,
   fullname VARCHAR(100) DEFAULT '',
@@ -13,6 +18,7 @@ CREATE TABLE users(
   facebook_account_id INT DEFAULT 0,
   google_account_id INT DEFAULT 0,
   role_id INT DEFAULT 2
+  FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 CREATE TABLE tokens(
@@ -32,7 +38,8 @@ CREATE TABLE social_accounts(
   provider_id VARCHAR(50) NOT NULL,
   email VARCHAR(150) NOT NULL COMMENT 'Email address of the user',
   name VARCHAR(100) NOT NULL COMMENT 'Full name of the user',
-  user_id INT
+  user_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE categories(
