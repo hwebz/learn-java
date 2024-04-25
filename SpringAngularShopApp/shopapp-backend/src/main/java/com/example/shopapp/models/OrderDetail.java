@@ -1,9 +1,16 @@
 package com.example.shopapp.models;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "order_details")
+@Builder
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
