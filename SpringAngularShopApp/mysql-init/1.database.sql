@@ -85,7 +85,9 @@ CREATE TABLE orders(
   shipping_date DATETIME,
   tracking_number VARCHAR(100),
   payment_method VARCHAR(100),
-  active TINYINT DEFAULT 1
+  active TINYINT DEFAULT 1,
+  created_at DATETIME,
+  updated_at DATETIME,
 );
 
 CREATE TABLE order_details(
