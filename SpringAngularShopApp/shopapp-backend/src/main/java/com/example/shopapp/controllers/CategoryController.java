@@ -38,8 +38,8 @@ public class CategoryController {
                     .toList();
             return ResponseEntity.badRequest().body(errorMessages);
         }
-        categoryService.createCategory(category);
-        return ResponseEntity.ok("Add Category");
+        Category createdCategory = categoryService.createCategory(category);
+        return ResponseEntity.ok(createdCategory);
     }
 
     @PutMapping("/{id}")
