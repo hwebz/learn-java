@@ -45,6 +45,11 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body("Get Product with id = " + productId);
     }
 
+    private boolean isImageFile(MultipartFile file) {
+        String contentType = file.getContentType();
+        return contentType != null && contentType.startsWith("image/");
+    }
+
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addProduct(
             @Valid @ModelAttribute ProductDTO productDTO,
@@ -92,6 +97,9 @@ public class ProductController {
     }
 
     private String uploadFile(MultipartFile file) throws IOException {
+        if (!isImageFile(file) || file.getOriginalFilename() == null) {
+            throw new IOException("Invalid image format");
+        }
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         String newFileName = UUID.randomUUID().toString() + "_" + filename;
         Path uploadDir = Paths.get("uploads");

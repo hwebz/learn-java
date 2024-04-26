@@ -34,7 +34,7 @@ public class ProductService implements IProductService {
                 .imageUrl(productImageDTO.getImageUrl())
                 .build();
         int noOfProductImages = productImageRepository.findByProductId(productImageDTO.getProductId()).size();
-        if (noOfProductImages >= 5) {
+        if (noOfProductImages >= ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
             throw new ProductImageExceededException("No of product images are exceeded (maximum is 5)");
         }
         return productImageRepository.save(newProductImage);
