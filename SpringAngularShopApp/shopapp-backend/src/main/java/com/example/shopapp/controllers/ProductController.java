@@ -1,7 +1,9 @@
 package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.ProductDTO;
+import com.example.shopapp.services.interfaces.IProductService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
+@RequiredArgsConstructor
 public class ProductController {
+    private final IProductService productService;
+
     @GetMapping()
     public ResponseEntity<String> getProducts(
             @RequestParam("page") int page,
@@ -55,6 +60,7 @@ public class ProductController {
 
             List<MultipartFile> files = productDTO.getFiles();
             files = files == null ? new ArrayList<>() : files;
+            List<String> imageUrls = new ArrayList<>();
             for (MultipartFile file: files) {
                 if (file != null) {
                     // Ignore the case of there is no files passed
@@ -71,12 +77,14 @@ public class ProductController {
                     }
                     try {
                         String fileName = uploadFile(file);
+                        imageUrls.add(fileName);
                     } catch (IOException e) {
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
                     }
                 }
             }
 
+            productService.createProduct(productDTO, imageUrls);
             return ResponseEntity.ok("Product created successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

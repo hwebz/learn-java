@@ -26,7 +26,7 @@ public class ProductDTO {
 
     @NotNull(message = "Category ID is required")
     @JsonProperty("category_id")
-    private String categoryId;
+    private Long categoryId;
 
     private List<MultipartFile> files;
 }
