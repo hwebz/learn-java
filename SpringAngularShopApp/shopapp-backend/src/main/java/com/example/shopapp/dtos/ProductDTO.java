@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO {

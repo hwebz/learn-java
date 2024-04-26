@@ -1,10 +1,13 @@
 package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.ProductDTO;
+import com.example.shopapp.exceptions.DataNotFoundException;
+import com.example.shopapp.exceptions.ProductImageExceededException;
 import com.example.shopapp.models.Product;
 import com.example.shopapp.responses.ProductListResponse;
 import com.example.shopapp.responses.ProductResponse;
 import com.example.shopapp.services.interfaces.IProductService;
+import com.github.javafaker.Faker;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -135,5 +138,26 @@ public class ProductController {
             @RequestParam("id") String productId
     ) {
         return ResponseEntity.ok("Delete Product with id = " + productId);
+    }
+
+    @PostMapping("/generateFakeProducts")
+    public ResponseEntity<String> generateFakeProducts() throws DataNotFoundException, ProductImageExceededException {
+        Faker faker = new Faker();
+        for (int i = 0; i < 2_000; i++) {
+            String productName = faker.commerce().productName();
+            if (productService.existsByName(productName)) {
+                continue;
+            }
+            ProductDTO productDTO = ProductDTO.builder()
+                    .name(productName)
+                    .price((float)faker.number().numberBetween(10, 90_000_000))
+                    .thumbnail("")
+                    .description(faker.lorem().sentence())
+                    .categoryId((long)faker.number().numberBetween(1, 5))
+                    .build();
+
+            productService.createProduct(productDTO, new ArrayList<>());
+        }
+        return ResponseEntity.ok("2000 fake products created successfully!");
     }
 }
