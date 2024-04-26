@@ -1,9 +1,15 @@
 package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.ProductDTO;
+import com.example.shopapp.models.Product;
+import com.example.shopapp.responses.ProductListResponse;
+import com.example.shopapp.responses.ProductResponse;
 import com.example.shopapp.services.interfaces.IProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +37,24 @@ public class ProductController {
     private final IProductService productService;
 
     @GetMapping()
-    public ResponseEntity<String> getProducts(
+    public ResponseEntity<ProductListResponse> getProducts(
             @RequestParam("page") int page,
             @RequestParam("limit") int limit
     ) {
-        return ResponseEntity.ok("Get Products");
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                limit,
+                Sort.by("createdAt").descending()
+        );
+        Page<ProductResponse> productsPage = productService.getAllProducts(pageRequest);
+        int totalPages = productsPage.getTotalPages();
+        List<ProductResponse> products = productsPage.getContent();
+        return ResponseEntity.ok(
+                ProductListResponse.builder()
+                        .products(products)
+                        .totalPages(totalPages)
+                        .build()
+        );
     }
 
     @GetMapping("/{id}")
