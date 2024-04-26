@@ -12,6 +12,7 @@ CREATE TABLE users(
   phone_number VARCHAR(20) NOT NULL,
   address VARCHAR(200) DEFAULT '',
   password VARCHAR(100) NOT NULL,
+  date_of_birth DATETIME,
   created_at DATETIME,
   updated_at DATETIME,
   is_active TINYINT DEFAULT 1,

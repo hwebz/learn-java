@@ -39,7 +39,7 @@ public class Order extends BaseEntity {
     private String note;
 
     @Column(name = "order_date", length = 100)
-    private LocalDateTime orderDate;
+    private Date orderDate;
 
     private String status;
 

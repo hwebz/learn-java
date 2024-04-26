@@ -61,10 +61,18 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getProduct(
-            @PathVariable("id") String productId
+    public ResponseEntity<?> getProduct(
+            @PathVariable("id") Long productId
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body("Get Product with id = " + productId);
+        try {
+            Product existingProduct = productService.getProductById(productId);
+            if (existingProduct == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(ProductResponse.fromProduct(existingProduct));
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     private boolean isImageFile(MultipartFile file) {
@@ -135,9 +143,18 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteProduct(
-            @RequestParam("id") String productId
+            @PathVariable("id") Long productId
     ) {
-        return ResponseEntity.ok("Delete Product with id = " + productId);
+        try {
+            Product existingProduct = productService.getProductById(productId);
+            if (existingProduct == null) {
+                return ResponseEntity.notFound().build();
+            }
+            productService.deleteProduct(productId);
+            return ResponseEntity.ok("Product with id = " + productId + " deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PostMapping("/generateFakeProducts")
