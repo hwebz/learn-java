@@ -89,6 +89,13 @@ public class OrderController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@Valid @PathVariable("id") Long id) {
-        return ResponseEntity.ok("Order deleted successfully");
+        try {
+            orderService.deleteOrder(id);
+            return ResponseEntity.ok("Order deleted successfully");
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 }

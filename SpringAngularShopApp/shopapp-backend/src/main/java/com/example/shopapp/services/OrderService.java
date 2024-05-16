@@ -76,7 +76,10 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteOrder(Long id) throws DataNotFoundException {
-
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(("Order not found")));
+        existingOrder.setActive(false);
+        orderRepository.save(existingOrder);
     }
 
     @Override
