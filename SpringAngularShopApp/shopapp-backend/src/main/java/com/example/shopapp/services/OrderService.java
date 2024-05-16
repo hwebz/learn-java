@@ -8,6 +8,7 @@ import com.example.shopapp.models.User;
 import com.example.shopapp.repositories.OrderRepository;
 import com.example.shopapp.repositories.UserRepository;
 import com.example.shopapp.responses.OrderResponse;
+import com.example.shopapp.responses.ProductResponse;
 import com.example.shopapp.services.interfaces.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,8 +52,10 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public OrderResponse getOrder(Long id) {
-        return null;
+    public OrderResponse getOrder(Long id) throws DataNotFoundException {
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(("Order not found")));
+        return modelMapper.map(existingOrder, OrderResponse.class);
     }
 
     @Override
@@ -65,7 +69,11 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<OrderResponse> getAllOrders(Long userId) {
-        return List.of();
+    public List<OrderResponse> getAllOrdersByUserId(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        return orders.stream()
+                .map(order -> modelMapper.map(order, OrderResponse.class))
+                .collect(Collectors.toList());
     }
 }

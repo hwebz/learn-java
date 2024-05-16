@@ -1,5 +1,7 @@
 package com.example.shopapp.responses;
 
+import com.example.shopapp.models.Order;
+import com.example.shopapp.models.Product;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import lombok.*;
@@ -17,6 +19,8 @@ public class OrderResponse extends BaseResponse {
 
     @JsonProperty("user_id")
     private Long userId;
+
+//    private User user;
 
     @JsonProperty("fullname")
     private String fullName;

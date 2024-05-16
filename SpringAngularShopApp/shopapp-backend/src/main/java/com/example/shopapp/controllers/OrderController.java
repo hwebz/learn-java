@@ -2,6 +2,7 @@ package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.OrderDTO;
 import com.example.shopapp.dtos.ProductDTO;
+import com.example.shopapp.repositories.ProductRepository;
 import com.example.shopapp.responses.OrderResponse;
 import com.example.shopapp.services.interfaces.IOrderService;
 import jakarta.validation.Valid;
@@ -20,11 +21,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
     private final IOrderService orderService;
+    private final ProductRepository productRepository;
 
-    @GetMapping("/{user_id}")
-    public ResponseEntity<?> getOrders(@Valid @PathVariable("user_id") Long user_id) {
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<?> getOrders(@Valid @PathVariable("user_id") Long userId) {
         try {
-            return ResponseEntity.ok("User orders retrieved successfully");
+            List<OrderResponse> orders = orderService.getAllOrdersByUserId(userId);
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getOrder(@Valid @PathVariable("id") Long id) {
+        try {
+            OrderResponse existingOrder = orderService.getOrder(id);
+            return ResponseEntity.ok(existingOrder);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
