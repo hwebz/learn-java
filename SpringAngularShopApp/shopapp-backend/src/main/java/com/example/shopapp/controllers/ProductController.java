@@ -41,8 +41,8 @@ public class ProductController {
 
     @GetMapping()
     public ResponseEntity<ProductListResponse> getProducts(
-            @RequestParam("page") int page,
-            @RequestParam("limit") int limit
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "limit", defaultValue = "10") int limit
     ) {
         PageRequest pageRequest = PageRequest.of(
                 page,
@@ -123,6 +123,27 @@ public class ProductController {
             return ResponseEntity.ok("Product created successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(
+        @PathVariable("id") Long productId,
+        @RequestBody ProductDTO productDTO,
+        BindingResult result
+    ) {
+        try {
+            if (result.hasErrors()) {
+                List<String> errorMessages = result.getFieldErrors().stream()
+                        .map(FieldError::getDefaultMessage)
+                        .toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
+
+            Product updatedProduct = productService.updateProduct(productId, productDTO);
+            return ResponseEntity.ok(updatedProduct);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
