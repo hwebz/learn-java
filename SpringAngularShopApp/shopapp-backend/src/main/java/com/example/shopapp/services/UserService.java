@@ -61,11 +61,12 @@ public class UserService implements IUserService {
         if (!passwordEncoder.matches(password, existingUser.getPassword())) {
             throw new BadCredentialsException("Invalid phone number or password");
         }
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            existingUser.getPhoneNumber(),
-            existingUser.getPassword()
-        );
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(phoneNumber, password, existingUser.getAuthorities());
         authenticationManager.authenticate(authenticationToken);
-        return jwtTokenUtil.generateToken(existingUser);
+        try {
+            return jwtTokenUtil.generateToken(existingUser);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

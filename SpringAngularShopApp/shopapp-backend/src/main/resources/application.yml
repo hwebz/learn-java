@@ -30,4 +30,4 @@ api:
   prefix: api/v1
 jwt:
   expiration: 2592000 # 30 days
-  secret: DemoSprintBoot2024
+  secret: DemoSprintBoot2024AndIDontWantThisSecretKeyHaveToBeLongerThanIThink

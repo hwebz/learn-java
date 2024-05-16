@@ -5,12 +5,18 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidParameterException;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +31,7 @@ public class JwtTokenUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String generateToken(User user) {
+    public String generateToken(User user) throws Exception {
         Map<String, Object> claims = new HashMap<>();
         claims.put("phoneNumber", user.getPhoneNumber());
 
@@ -37,14 +43,16 @@ public class JwtTokenUtil {
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
         } catch (Exception e) {
-            System.out.println("Cannot create jwt token, error: " + e.getMessage());
-            return null;
+            throw new InvalidParameterException("Cannot create jwt token, error: " + e.getMessage());
         }
     }
 
     private Key getSignInKey() {
-        byte[] bytes = Decoders.BASE64.decode(secret);
-        return Keys.hmacShaKeyFor(bytes);
+        byte[] keyBytes = this.secret.getBytes();
+        if (keyBytes.length < 32) {
+            throw new IllegalArgumentException("The secret key must be at least 32 bytes long");
+        }
+        return new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256");
     }
 
     private Claims extractClaims(String token) {
