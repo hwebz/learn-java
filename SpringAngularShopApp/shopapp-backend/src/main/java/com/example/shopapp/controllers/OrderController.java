@@ -2,6 +2,7 @@ package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.OrderDTO;
 import com.example.shopapp.dtos.ProductDTO;
+import com.example.shopapp.exceptions.DataNotFoundException;
 import com.example.shopapp.repositories.ProductRepository;
 import com.example.shopapp.responses.OrderResponse;
 import com.example.shopapp.services.interfaces.IOrderService;
@@ -38,6 +39,8 @@ public class OrderController {
         try {
             OrderResponse existingOrder = orderService.getOrder(id);
             return ResponseEntity.ok(existingOrder);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -46,9 +49,23 @@ public class OrderController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateOrder(
             @Valid @PathVariable("id") Long id,
-            @Valid @RequestBody OrderDTO orderDTO
+            @Valid @RequestBody OrderDTO orderDTO,
+            BindingResult result
     ) {
-        return ResponseEntity.ok("Order updated successfully");
+        try {
+            if (result.hasErrors()) {
+                List<String> errorMessages = result.getFieldErrors().stream()
+                        .map(FieldError::getDefaultMessage)
+                        .toList();
+                return ResponseEntity.badRequest().body(errorMessages);
+            }
+            OrderResponse orderResponse = orderService.updateOrder(id, orderDTO);
+            return ResponseEntity.ok(orderResponse);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PostMapping()

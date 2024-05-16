@@ -59,12 +59,23 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public OrderResponse updateOrder(Long id, OrderDTO orderDTO) {
-        return null;
+    public OrderResponse updateOrder(Long id, OrderDTO orderDTO) throws DataNotFoundException {
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(("Order not found")));
+        User existingUser = userRepository.findById(orderDTO.getUserId())
+                .orElseThrow(() -> new DataNotFoundException(("User not found")));
+
+        modelMapper.typeMap(OrderDTO.class, Order.class)
+                .addMappings(mapper -> mapper.skip(Order::setId));
+        modelMapper.map(orderDTO, existingOrder);
+        existingOrder.setUser(existingUser);
+        orderRepository.save(existingOrder);
+
+        return modelMapper.map(existingOrder, OrderResponse.class);
     }
 
     @Override
-    public void deleteOrder(Long id) {
+    public void deleteOrder(Long id) throws DataNotFoundException {
 
     }
 
