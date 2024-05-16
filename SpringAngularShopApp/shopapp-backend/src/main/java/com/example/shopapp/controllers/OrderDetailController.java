@@ -1,7 +1,12 @@
 package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.OrderDetailDTO;
+import com.example.shopapp.exceptions.DataNotFoundException;
+import com.example.shopapp.models.OrderDetail;
+import com.example.shopapp.repositories.OrderDetailRepository;
+import com.example.shopapp.services.OrderDetailService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,7 +18,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("${api.prefix}/order-details")
+@RequiredArgsConstructor
 public class OrderDetailController {
+    private final OrderDetailService orderDetailService;
+    private final OrderDetailRepository orderDetailRepository;
+
     @PostMapping()
     public ResponseEntity<?> createOrderDetail(
             @Valid @RequestBody OrderDetailDTO orderDetailDTO,
@@ -26,8 +35,10 @@ public class OrderDetailController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-
-            return ResponseEntity.ok("Order detail created successfully");
+            OrderDetail orderDetail = orderDetailService.createOrderDetail(orderDetailDTO);
+            return ResponseEntity.ok(orderDetail);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -35,12 +46,20 @@ public class OrderDetailController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderDetail(@Valid @PathVariable("id") Long id) {
-        return ResponseEntity.ok("Order detail retrieved successfully");
+        try {
+            OrderDetail orderDetail = orderDetailService.getOrderDetail(id);
+            return ResponseEntity.ok(orderDetail);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping("/order/{orderId}")
     public ResponseEntity<?> getOrderDetailByOrderId(@Valid @PathVariable("orderId") Long orderId) {
-        return ResponseEntity.ok("Order detail by order ID retrieved successfully");
+        List<OrderDetail> orderDetails = orderDetailRepository.findByOrderId(orderId);
+        return ResponseEntity.ok(orderDetails);
     }
 
     @PutMapping("/{id}")
