@@ -18,4 +18,11 @@ public class Role {
 
     @Column(name = "name", nullable = false, length = 20)
     private String name;
+
+    public static String ADMIN = "ADMINISTRATOR";
+    public static String USER = "USER";
+
+    public boolean isRole(String role) {
+        return this.getName().toUpperCase().equals(role);
+    }
 }

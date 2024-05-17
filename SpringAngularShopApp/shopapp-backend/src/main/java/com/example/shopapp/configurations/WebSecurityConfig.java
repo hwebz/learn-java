@@ -1,6 +1,7 @@
 package com.example.shopapp.configurations;
 
 import com.example.shopapp.filters.JwtTokenFilter;
+import com.example.shopapp.models.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,8 +32,10 @@ public class WebSecurityConfig {
                         apiPrefix + "/users/login"
                     )
                     .permitAll()
-                    .requestMatchers(HttpMethod.PUT, apiPrefix + "/orders/**")
-                            .hasRole("ADMINISTRATOR")
+                    .requestMatchers(HttpMethod.PUT, apiPrefix + "/orders/**").hasRole(Role.ADMIN)
+                    .requestMatchers(HttpMethod.POST, apiPrefix + "/orders/**").hasRole(Role.USER)
+                    .requestMatchers(HttpMethod.DELETE, apiPrefix + "/orders/**").hasRole(Role.ADMIN)
+                    .requestMatchers(HttpMethod.GET, apiPrefix + "/orders/**").hasAnyRole(Role.USER, Role.ADMIN)
                             .anyRequest()
                             .authenticated();
                 });
