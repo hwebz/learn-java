@@ -9,6 +9,7 @@ import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -52,14 +53,15 @@ public class JwtTokenUtil {
         if (keyBytes.length < 32) {
             throw new IllegalArgumentException("The secret key must be at least 32 bytes long");
         }
-        return new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256");
+//        return new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256");
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private Claims extractClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(getSignInKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
@@ -71,5 +73,14 @@ public class JwtTokenUtil {
     public boolean isTokenExpired(String token) {
         Date expiration = this.getClaim(token, Claims::getExpiration);
         return expiration.before(new Date());
+    }
+
+    public String getPhoneNunber(String token) {
+        return getClaim(token, Claims::getSubject);
+    }
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        String phoneNumber = getPhoneNunber(token);
+        return phoneNumber.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 }
