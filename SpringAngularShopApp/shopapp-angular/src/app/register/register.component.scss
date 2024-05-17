@@ -1,0 +1,9 @@
+/* Style invalid input elements */
+input.ng-invalid {
+  border-color: red;
+}
+
+/* Style touched input elements */
+input.ng-touched {
+  background-color: #f5f5f5;
+}
