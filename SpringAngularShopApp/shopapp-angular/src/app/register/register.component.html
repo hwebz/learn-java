@@ -3,12 +3,15 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-6 card p-3">
-      <h2 class="mb-3 text-center">Regsiter</h2>
-      <form novalidate>
+      <h2 class="mb-3 text-center">Register</h2>
+      <form
+        class="need-validation"
+        novalidate
+        #registerForm="ngForm"
+        (ngSubmit)="register()"
+      >
         <div class="mb-3">
-          <label
-            class="form-label"
-          >Phone Number</label>
+          <label class="form-label">Phone Number</label>
           <input
             type="text"
             class="form-control"
@@ -18,11 +21,10 @@
             [(ngModel)]="phoneNumber"
             (input)="onPhoneChange()"
           />
+          <div class="invalid-feedback" *ngIf="phoneNumber.length !== 10">Phone number is invalid</div>
         </div>
         <div class="mb-3">
-          <label
-            class="form-label"
-          >Password</label>
+          <label class="form-label">Password</label>
           <input
             type="password"
             class="form-control"
@@ -31,24 +33,24 @@
             placeholder="At least 3 characters"
             [(ngModel)]="password"
           >
+          <div class="invalid-feedback" *ngIf="password.length < 3">Password has at least 3 characters</div>
         </div>
         <div class="mb-3">
-          <label
-            class="form-label"
-          >Confirm Password</label>
+          <label class="form-label">Confirm Password</label>
           <input
-            type="text"
+            type="password"
             class="form-control"
             name="confirmPassword"
             placeholder="At least 3 characters"
             required
+            class="{{confirmPassword !== password ? 'ng-invalid' : ''}}"
             [(ngModel)]="confirmPassword"
           >
+          <div class="invalid-feedback" *ngIf="confirmPassword.length < 3">Password has at least 3 characters</div>
+          <div class="invalid-feedback" *ngIf="confirmPassword !== password && password.length >= 3 && confirmPassword.length >= 3">Password doesn't match</div>
         </div>
         <div class="mb-3">
-          <label
-            class="form-label"
-          >Full Name</label>
+          <label class="form-label">Full Name</label>
           <input
             type="text"
             class="form-control"
@@ -57,24 +59,24 @@
             placeholder="John Doe"
             [(ngModel)]="fullName"
           >
+          <div class="invalid-feedback" *ngIf="!fullName">Please enter your name</div>
         </div>
         <div class="mb-3">
-          <label
-            class="form-label"
-          >Date of Birth</label>
+          <label class="form-label">Date of Birth</label>
           <input
             type="date"
             class="form-control"
             name="dob"
             placeholder="John Doe"
             required
+            class="{{overEighteen() ? '' : 'ng-invalid'}}"
             [(ngModel)]="dateOfBirth"
           >
+          <div class="invalid-feedback" *ngIf="!dateOfBirth">Please provide your date of birth</div>
+          <div class="invalid-feedback" *ngIf="!overEighteen()">You're not 18</div>
         </div>
         <div class="mb-3">
-          <label
-            class="form-label"
-          >Address</label>
+          <label class="form-label">Address</label>
           <input
             type="text"
             class="form-control"
@@ -88,10 +90,11 @@
             type="checkbox"
             class="form-check-input"
             name="agree"
+            required
             [(ngModel)]="agreeTermsAndConditions"
           >
           <label
-            class="form-check-label"
+            class="form-check-label {{agreeTermsAndConditions ? '' : 'text-danger'}}"
             for="rememberMeCheck"
           >I agree with all terms and conditions</label>
         </div>

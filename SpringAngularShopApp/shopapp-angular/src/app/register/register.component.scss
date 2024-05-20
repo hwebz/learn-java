@@ -1,9 +1,12 @@
-/* Style invalid input elements */
-input.ng-invalid {
+.ng-invalid.ng-dirty,
+.ng-submitted .ng-invalid {
   border-color: red;
 }
 
-/* Style touched input elements */
-input.ng-touched {
-  background-color: #f5f5f5;
+.ng-invalid.ng-dirty~.invalid-feedback,
+.ng-invalid.ng-dirty~.invalid-tooltip,
+.ng-submitted .ng-invalid~.invalid-feedback,
+.ng-submitted .ng-invalid~.invalid-tooltip{
+  display: block;
 }
+
