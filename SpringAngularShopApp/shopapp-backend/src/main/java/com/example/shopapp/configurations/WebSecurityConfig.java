@@ -37,7 +37,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> {
                     requests.requestMatchers(
                         apiPrefix + "/users/register",
-                        apiPrefix + "/users/login"
+                        apiPrefix + "/users/login",
+                        apiPrefix + "/roles"
                     )
                     .permitAll()
 

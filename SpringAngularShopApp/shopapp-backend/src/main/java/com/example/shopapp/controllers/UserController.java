@@ -2,6 +2,8 @@ package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.UserDTO;
 import com.example.shopapp.dtos.UserLoginDTO;
+import com.example.shopapp.responses.LoginResponse;
+import com.example.shopapp.responses.RegisterResponse;
 import com.example.shopapp.services.interfaces.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +42,11 @@ public class UserController {
             }
 
             userService.createUser(userDTO);
-            return ResponseEntity.ok("Register successfully.");
+            RegisterResponse response = RegisterResponse.builder()
+                    .success(true)
+                    .message("Register successfully")
+                    .build();
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -60,7 +66,12 @@ public class UserController {
             }
 
             String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword());
-            return ResponseEntity.ok(token);
+            LoginResponse response = LoginResponse.builder()
+                    .token(token)
+                    .success(true)
+                    .message("Login successfully")
+                    .build();
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
