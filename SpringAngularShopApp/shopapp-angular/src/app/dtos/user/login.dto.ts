@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsPhoneNumber, IsString, validate } from "class-validator";
+import { IsNotEmpty, IsNumber, IsPhoneNumber, IsString, validate } from "class-validator";
 
 export class LoginDTO {
   @IsPhoneNumber('VN')
@@ -8,9 +8,14 @@ export class LoginDTO {
   @IsNotEmpty()
   password: string;
 
+  @IsNumber()
+  @IsNotEmpty()
+  role_id: string;
+
   constructor(data: any) {
     this.phone_number = data.phone_number;
     this.password = data.password;
+    this.role_id = data.role_id;
   }
 
   async validate() {

@@ -59,12 +59,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public String login(String phoneNumber, String password) throws DataNotFoundException {
+    public String login(String phoneNumber, String password, Long roleId) throws DataNotFoundException {
         User existingUser = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new DataNotFoundException("Invalid phone number or password"));
 
         if (!passwordEncoder.matches(password, existingUser.getPassword())) {
             throw new BadCredentialsException("Invalid phone number or password");
+        }
+        Role existingRole = roleRepository.findById(roleId)
+                .orElseThrow(() -> new DataNotFoundException("Role not found"));
+        if (!existingRole.getId().equals(existingUser.getRole().getId())) {
+            throw new DataIntegrityViolationException("Role does not match.");
         }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(phoneNumber, password, existingUser.getAuthorities());
         authenticationManager.authenticate(authenticationToken);

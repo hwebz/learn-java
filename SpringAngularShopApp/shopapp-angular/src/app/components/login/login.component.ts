@@ -51,7 +51,8 @@ export class LoginComponent implements OnInit {
   async login() {
     const loginData = new LoginDTO({
       phone_number: this.phoneNumber,
-      password: this.password
+      password: this.password,
+      role_id: this.selectedRole?.id
     })
 
     const isValid = await loginData.validate()

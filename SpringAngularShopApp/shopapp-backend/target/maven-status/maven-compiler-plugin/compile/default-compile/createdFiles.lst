@@ -1,6 +1,9 @@
+com/example/shopapp/services/RoleService.class
 com/example/shopapp/responses/LoginResponse$LoginResponseBuilder.class
 com/example/shopapp/responses/LoginResponse.class
+com/example/shopapp/controllers/RoleController.class
 com/example/shopapp/responses/RegisterResponse$RegisterResponseBuilder.class
 com/example/shopapp/ShopApplication.class
 com/example/shopapp/configurations/WebSecurityConfig$1.class
+com/example/shopapp/services/interfaces/IRoleService.class
 com/example/shopapp/responses/RegisterResponse.class
