@@ -1,4 +1,4 @@
-import { IsDataURI, IsDate, IsNotEmpty, IsPhoneNumber, IsString } from "class-validator";
+import { IsDataURI, IsDate, IsNotEmpty, IsPhoneNumber, IsString, validate } from "class-validator";
 
 export class RegisterDTO {
   @IsString()
@@ -35,5 +35,20 @@ export class RegisterDTO {
     this.role_id = 2;
     this.address = data.address;
     this.date_of_birth = data.date_of_birth;
+  }
+
+  async validate() {
+    try {
+      const errors = await validate(this);
+      if (errors.length > 0) {
+        console.log('validation failed. errors: ', errors);
+        return false;
+      }
+      console.log('validation succeed');
+      return true;
+    } catch (error) {
+      console.log('validation failed. error: ', error);
+      return false;
+    }
   }
 }

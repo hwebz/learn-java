@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { catchError, tap, throwError } from 'rxjs';
-import { RegisterDTO } from '../dtos/register.dto';
+import { RegisterDTO } from '../dtos/user/register.dto';
 
 @Component({
   selector: 'app-register',
@@ -47,34 +47,31 @@ export class RegisterComponent {
     return age >= 18;
   }
 
-  register() {
+  async register() {
     if (
       this.password != this.confirmPassword ||
       !this.overEighteen()
     ) return;
 
-    const registerData: RegisterDTO = {
+    const registerData = new RegisterDTO({
       fullname: this.fullName,
       phone_number: this.phoneNumber,
       password: this.password,
       confirm_password: this.confirmPassword,
       address: this.address,
       date_of_birth: this.dateOfBirth,
+    })
+
+    const isValid = await registerData.validate()
+    if (!isValid) {
+      return;
     }
 
     this.userService.register(registerData)
-    .pipe(
-      tap((response: any) => {
-        console.log(response)
-      }),
-      catchError((error: any) => {
-        alert(error.error);
-        return throwError(error);
-      })
-    )
     .subscribe({
       next: (response: any) => {
         alert(response);
+        this.router.navigate(['/login'])
       },
       error: (e: any) => {
         alert(e.error)

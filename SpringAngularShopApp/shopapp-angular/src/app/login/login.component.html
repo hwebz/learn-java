@@ -4,20 +4,48 @@
   <div class="row justify-content-center">
       <div class="col-md-6 card p-3">
           <h2 class="mb-3 text-center">Login</h2>
-          <form>
-              <div class="mb-3">
-                  <label for="emailInput" class="form-label">Email address</label>
-                  <input type="email" class="form-control" id="emailInput" placeholder="name@example.com">
+          <form
+            class="need-validation"
+            novalidate
+            #loginForm="ngForm"
+            (ngSubmit)="login()"
+          >
+            <div class="mb-3">
+                <label class="form-label">Phone Number</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="phoneNumber"
+                  placeholder="E.g: 0987654321"
+                  required
+                  [(ngModel)]="phoneNumber"
+                />
+                <div class="invalid-feedback" *ngIf="phoneNumber.length !== 10">Phone number is invalid</div>
               </div>
               <div class="mb-3">
-                  <label for="passwordInput" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="passwordInput" placeholder="Password">
+                <label class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  required
+                  placeholder="At least 3 characters"
+                  [(ngModel)]="password"
+                >
+                <div class="invalid-feedback" *ngIf="password.length < 3">Password has at least 3 characters</div>
               </div>
               <div class="d-flex justify-content-between">
                 <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="rememberMeCheck">
-                    <label class="form-check-label" for="rememberMeCheck">Remember me</label>
-                </div>
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      name="rememberMe"
+                      [(ngModel)]="rememberMe"
+                    >
+                    <label
+                      for="rememberMeCheck"
+                    >Remember Me?</label>
+                  </div>
                 <div class="mb-3">
                     <a href="#" class="link-primary">Forgot password?</a>
                 </div>

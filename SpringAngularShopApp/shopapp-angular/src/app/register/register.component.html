@@ -96,7 +96,7 @@
             [(ngModel)]="agreeTermsAndConditions"
           >
           <label
-            class="form-check-label {{agreeTermsAndConditions ? '' : 'text-danger'}}"
+            class="form-check-label {{!agreeTermsAndConditions && registerForm.form.controls['agree'].dirty ? 'text-danger' : ''}}"
             for="rememberMeCheck"
           >I agree with all terms and conditions</label>
         </div>
