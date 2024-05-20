@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
+import { catchError, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ export class RegisterComponent {
   agreeTermsAndConditions: boolean = false;
   dateOfBirth?: Date;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   onPhoneChange() {
     console.log('test')
@@ -51,34 +52,29 @@ export class RegisterComponent {
       !this.overEighteen()
     ) return;
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    this.http.post('/api/users/register', {
+    this.userService.register({
       fullname: this.fullName,
       phone_number: this.phoneNumber,
       password: this.password,
       confirm_password: this.confirmPassword,
       role_id: 2,
       address: this.address
-    }, {
-      headers,
-      // By default HttpClient response type is json, it means API returns 200 OK with string message
-      // it gonna throw an error here because of Invalid JSON, you have to return ResponseEntity.ok({ message: "Register successfully." })
-      // Otherwise, you can use 'text' to prevent that error
-      responseType: 'text'
     })
+    .pipe(
+      tap((response: any) => {
+        console.log(response)
+      }),
+      catchError((error: any) => {
+        alert(error.error);
+        return throwError(error);
+      })
+    )
     .subscribe({
       next: (response: any) => {
-        console.log(response);
-        if ([200, 201].includes(response?.status)) {
-          this.router.navigate(['/login'])
-        } else {
-
-        }
-      },
-      complete: () => {
+        alert(response);
       },
       error: (e: any) => {
-        console.log(e.error)
+        alert(e.error)
       }
     });
   }
