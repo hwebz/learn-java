@@ -82,8 +82,10 @@
             class="form-control"
             name="address"
             placeholder="123 Main Street"
+            required
             [(ngModel)]="address"
           >
+          <div class="invalid-feedback" *ngIf="!address">Please provide your address</div>
         </div>
         <div class="mb-3 form-check">
           <input

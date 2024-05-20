@@ -59,10 +59,16 @@ export class RegisterComponent {
       confirm_password: this.confirmPassword,
       role_id: 2,
       address: this.address
-    }, { headers })
+    }, {
+      headers,
+      // By default HttpClient response type is json, it means API returns 200 OK with string message
+      // it gonna throw an error here because of Invalid JSON, you have to return ResponseEntity.ok({ message: "Register successfully." })
+      // Otherwise, you can use 'text' to prevent that error
+      responseType: 'text'
+    })
     .subscribe({
       next: (response: any) => {
-        debugger;
+        console.log(response);
         if ([200, 201].includes(response?.status)) {
           this.router.navigate(['/login'])
         } else {
@@ -70,10 +76,9 @@ export class RegisterComponent {
         }
       },
       complete: () => {
-        debugger
       },
       error: (e: any) => {
-        console.error(e);
+        console.log(e.error)
       }
     });
   }
