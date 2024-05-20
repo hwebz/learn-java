@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
-import { LoginDTO } from '../dtos/user/login.dto';
+import { UserService } from '../../services/user.service';
+import { LoginDTO } from '../../dtos/user/login.dto';
+import LoginResponse from '../../responses/user/login.response';
 
 @Component({
   selector: 'app-login',
@@ -30,9 +31,14 @@ export class LoginComponent {
 
     this.userService.login(loginData)
     .subscribe({
-      next: (response: any) => {
-        alert(response);
-        this.router.navigate(['/home'])
+      next: (response: LoginResponse) => {
+        alert(response.message);
+        if (response.success) {
+          this.router.navigate(['/home'])
+        }
+      },
+      complete: () => {
+        console.log('login completed')
       },
       error: (e: any) => {
         alert(e.error)

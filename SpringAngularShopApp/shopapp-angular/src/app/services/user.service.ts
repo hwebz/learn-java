@@ -22,7 +22,7 @@ export class UserService {
       // By default HttpClient response type is json, it means API returns 200 OK with string message
       // it gonna throw an error here because of Invalid JSON, you have to return ResponseEntity.ok({ message: "Register successfully." })
       // Otherwise, you can use 'text' to prevent that error
-      responseType: 'text'
+      // responseType: 'text'
     });
   }
 
@@ -30,7 +30,7 @@ export class UserService {
     const endpoint = this.apiUrl + '/login';
     return this.http.post(endpoint, loginData, {
       headers: this.headers,
-      responseType: 'text'
+      // responseType: 'text'
     })
   }
 }

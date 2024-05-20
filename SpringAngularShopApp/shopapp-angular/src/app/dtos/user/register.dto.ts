@@ -4,7 +4,7 @@ export class RegisterDTO {
   @IsString()
   fullname: string;
 
-  @IsPhoneNumber()
+  @IsPhoneNumber('VN')
   phone_number: string;
 
   @IsString()

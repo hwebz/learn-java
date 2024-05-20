@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../services/user.service';
 import { catchError, tap, throwError } from 'rxjs';
-import { RegisterDTO } from '../dtos/user/register.dto';
+import { RegisterDTO } from '../../dtos/user/register.dto';
+import RegisterResponse from '../../responses/user/register.response';
 
 @Component({
   selector: 'app-register',
@@ -69,9 +70,11 @@ export class RegisterComponent {
 
     this.userService.register(registerData)
     .subscribe({
-      next: (response: any) => {
-        alert(response);
-        this.router.navigate(['/login'])
+      next: (response: RegisterResponse) => {
+        alert(response.message);
+        if (response.success) {
+          this.router.navigate(['/login'])
+        }
       },
       error: (e: any) => {
         alert(e.error)
