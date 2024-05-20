@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { catchError, tap, throwError } from 'rxjs';
+import { RegisterDTO } from '../dtos/register.dto';
 
 @Component({
   selector: 'app-register',
@@ -52,14 +53,16 @@ export class RegisterComponent {
       !this.overEighteen()
     ) return;
 
-    this.userService.register({
+    const registerData: RegisterDTO = {
       fullname: this.fullName,
       phone_number: this.phoneNumber,
       password: this.password,
       confirm_password: this.confirmPassword,
-      role_id: 2,
-      address: this.address
-    })
+      address: this.address,
+      date_of_birth: this.dateOfBirth,
+    }
+
+    this.userService.register(registerData)
     .pipe(
       tap((response: any) => {
         console.log(response)
