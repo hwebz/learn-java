@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { LoginDTO } from '../../dtos/user/login.dto';
 import LoginResponse from '../../responses/user/login.response';
+import TokenService from '../../services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,11 @@ export class LoginComponent {
   password: string = '';
   rememberMe: boolean = false;
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private tokenService: TokenService
+  ) {}
 
   async login() {
     const loginData = new LoginDTO({
@@ -34,6 +39,7 @@ export class LoginComponent {
       next: (response: LoginResponse) => {
         alert(response.message);
         if (response.success) {
+          this.tokenService.setToken(response.token);
           this.router.navigate(['/home'])
         }
       },

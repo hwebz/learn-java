@@ -1,5 +1,5 @@
 export default interface LoginResponse {
-  token: String;
-  message: String;
-  success: Boolean;
+  token: string;
+  message: string;
+  success: boolean;
 }
