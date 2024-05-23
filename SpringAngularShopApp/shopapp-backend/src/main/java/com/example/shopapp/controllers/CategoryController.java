@@ -2,6 +2,7 @@ package com.example.shopapp.controllers;
 
 import com.example.shopapp.dtos.CategoryDTO;
 import com.example.shopapp.models.Category;
+import com.example.shopapp.responses.CategoryListResponse;
 import com.example.shopapp.services.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,16 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping()
-    public ResponseEntity<List<Category>> getCategories(
-            @RequestParam("page") int page,
-            @RequestParam("limit") int limit
+    public ResponseEntity<CategoryListResponse> getCategories(
+//            @RequestParam("page") int page,
+//            @RequestParam("limit") int limit
     ) {
         List<Category> categories = categoryService.getAllCategories();
-        return ResponseEntity.ok(categories);
+        CategoryListResponse response = CategoryListResponse.builder()
+                .categories(categories)
+                .totalCategories(categories.size())
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping()

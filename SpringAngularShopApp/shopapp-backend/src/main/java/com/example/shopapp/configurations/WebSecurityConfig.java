@@ -42,7 +42,6 @@ public class WebSecurityConfig {
                     )
                     .permitAll()
 
-                    .requestMatchers(HttpMethod.GET, apiPrefix + "/categories?**").hasAnyRole(Role.USER, Role.ADMIN)
                     .requestMatchers(HttpMethod.POST, apiPrefix + "/categories/**").hasRole(Role.ADMIN)
                     .requestMatchers(HttpMethod.DELETE, apiPrefix + "/categories/**").hasRole(Role.ADMIN)
                     .requestMatchers(HttpMethod.PUT, apiPrefix + "/categories/**").hasRole(Role.ADMIN)
@@ -52,6 +51,7 @@ public class WebSecurityConfig {
                     .requestMatchers(HttpMethod.DELETE, apiPrefix + "/orders/**").hasRole(Role.ADMIN)
                     .requestMatchers(HttpMethod.GET, apiPrefix + "/orders/**").hasAnyRole(Role.USER, Role.ADMIN)
 
+                    .requestMatchers(HttpMethod.GET, apiPrefix + "/categories/**").permitAll()
                     .requestMatchers(HttpMethod.GET, apiPrefix + "/products/**").permitAll()
                     .requestMatchers(HttpMethod.GET, apiPrefix + "/products/images/**").permitAll()
 

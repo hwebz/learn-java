@@ -3,6 +3,9 @@ import ProductService from '../../services/product.service';
 import Product from '../../models/product.model';
 import ProductsResponse from '../../responses/products.response';
 import formatVNDCurrency from '../../utils/formatCurrency';
+import CategoryService from '../../services/category.service';
+import CategoriesResponse from '../../responses/category.response';
+import Category from '../../models/category.model';
 
 @Component({
   selector: 'app-home',
@@ -12,19 +15,29 @@ import formatVNDCurrency from '../../utils/formatCurrency';
 export class HomeComponent implements OnInit {
   products: Product[] = [];
   currentPage: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 12;
   pages: number[] = [];
   totalPages: number = 0;
   visiblePages: number[] = [];
+  selectedCategory?: number;
+  categories: Category[] = [];
+  totalCategories: number = 0;
+  searchText?: string;
   
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private categoryService: CategoryService) {}
 
   ngOnInit(): void {
+    this.getCategories();
+    this.getProducts(this.currentPage, this.itemsPerPage);
+  }
+
+  onSearchProduct() {
+    this.currentPage = 1;
     this.getProducts(this.currentPage, this.itemsPerPage);
   }
 
   getProducts(page: number, limit: number) {
-    this.productService.getProducts(page, limit)
+    this.productService.getProducts(page, limit, this.selectedCategory, this.searchText)
     .subscribe({
       next: (response: ProductsResponse) => {
         response.products.forEach((product: Product) => {
@@ -33,6 +46,23 @@ export class HomeComponent implements OnInit {
         });
         this.products = response.products;
         this.totalPages = response.totalPages;
+        this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
+      },
+      complete: () => {
+        console.log('fetch products completed')
+      },
+      error: (e: any) => {
+        alert(e.error)
+      }
+    });
+  }
+
+  getCategories() {
+    this.categoryService.getCategories()
+    .subscribe({
+      next: (response: CategoriesResponse) => {
+        this.categories = response.categories;
+        this.totalCategories = response.totalCategories;
         this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
       },
       complete: () => {
@@ -61,7 +91,7 @@ export class HomeComponent implements OnInit {
     }
 
     // Generate the visible page numbers
-    for (let i = startPage; i <= endPage; i++) {
+    for (let i = startPage; i < endPage; i++) {
       visiblePages.push(i);
     }
 

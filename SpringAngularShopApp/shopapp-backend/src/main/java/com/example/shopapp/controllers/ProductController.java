@@ -42,6 +42,8 @@ public class ProductController {
 
     @GetMapping()
     public ResponseEntity<ProductListResponse> getProducts(
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,
+            @RequestParam(value = "category_id", defaultValue = "0") Long categoryId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "limit", defaultValue = "10") int limit
     ) {
@@ -50,7 +52,7 @@ public class ProductController {
                 limit,
                 Sort.by("createdAt").descending()
         );
-        Page<ProductResponse> productsPage = productService.getAllProducts(pageRequest);
+        Page<ProductResponse> productsPage = productService.getAllProducts(keyword, categoryId, pageRequest);
         int totalPages = productsPage.getTotalPages();
         List<ProductResponse> products = productsPage.getContent();
         return ResponseEntity.ok(

@@ -11,6 +11,7 @@
 /app/src/main/java/com/example/shopapp/repositories/RoleRepository.java
 /app/src/main/java/com/example/shopapp/models/SocialAccount.java
 /app/src/main/java/com/example/shopapp/controllers/UserController.java
+/app/src/main/java/com/example/shopapp/responses/CategoryListResponse.java
 /app/src/main/java/com/example/shopapp/services/CategoryService.java
 /app/src/main/java/com/example/shopapp/services/interfaces/IOrderService.java
 /app/src/main/java/com/example/shopapp/controllers/RoleController.java

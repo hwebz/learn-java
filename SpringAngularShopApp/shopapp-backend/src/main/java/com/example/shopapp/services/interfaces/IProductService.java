@@ -14,7 +14,7 @@ import java.util.List;
 public interface IProductService {
     public Product createProduct(ProductDTO productDTO, List<String> imageUrls) throws DataNotFoundException, ProductImageExceededException;
     Product getProductById(Long id) throws DataNotFoundException;
-    Page<ProductResponse> getAllProducts(PageRequest pageRequest);
+    Page<ProductResponse> getAllProducts(String keyword, Long categoryId, PageRequest pageRequest);
     Product updateProduct(Long id, ProductDTO productDTO) throws DataNotFoundException;
     void deleteProduct(Long id);
     boolean existsByName(String name);
