@@ -21,15 +21,13 @@
 
 <main class="container mt-4">
   <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-      <div class="col">
+      <div class="col" *ngFor="let product of products">
           <div class="card">
-              <img src="https://cdn.shopify.com/s/files/1/2303/2711/files/2_e822dae0-14df-4cb8-b145-ea4dc0966b34.jpg?v=1617059123" class="card-img-top" alt="Product Image">
+              <img src="/api/products/images/{{product.thumbnail}}" class="card-img-top" alt="{{product.name}}">
               <div class="card-body">
-                <h5 class="card-title">Product Name</h5>
-                <p class="card-text">Short description of the product.</p>
-                <p><strong>Warranty:</strong> 2 Years</p>
-                <p><strong>Price:</strong> $999.99</p>
-                <p><strong>Rating:</strong> ★★★★☆</p>
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">{{product.description}}</p>
+                <p><strong>Price:</strong> {{product.priceFomatted}}</p>
                 <div class="button-group d-grid gap-2">
                   <button class="btn btn-primary" type="button">Add to Cart</button>
                   <button class="btn btn-success" type="button">Buy Now</button>
@@ -41,28 +39,28 @@
 
   <nav class="mt-5">
     <ul class="pagination pagination-lg justify-content-center">
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
+      <li class="page-item" *ngIf="currentPage > 1">
+        <a class="page-link" aria-label="Previous" (click)="onPageChange(1)">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Previous">
+      <li class="page-item" *ngIf="currentPage > 1">
+        <a class="page-link" aria-label="Previous" (click)="onPageChange(currentPage - 1)">
           <span aria-hidden="true">&lsaquo;</span>
         </a>
       </li>
-      <li class="page-item active" aria-current="page">
-        <span class="page-link">1</span>
-      </li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
+      <ng-container *ngFor="let page of visiblePages">
+        <li class="page-item" [ngClass]="{'active': page == currentPage}">
+          <a class="page-link" (click)="onPageChange(page)">{{page}}</a>
+        </li>
+      </ng-container>
+      <li class="page-item" *ngIf="currentPage < totalPages">
+        <a class="page-link" aria-label="Next" (click)="onPageChange(currentPage + 1)">
           <span aria-hidden="true">&rsaquo;</span>
         </a>
       </li>
-      <li class="page-item">
-        <a class="page-link" href="#" aria-label="Next">
+      <li class="page-item" *ngIf="currentPage < totalPages">
+        <a class="page-link" aria-label="Next" (click)="onPageChange(totalPages)">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
