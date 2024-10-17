@@ -33,6 +33,7 @@
 /app/src/main/java/com/example/shopapp/services/OrderDetailService.java
 /app/src/main/java/com/example/shopapp/services/interfaces/IRoleService.java
 /app/src/main/java/com/example/shopapp/models/Role.java
+/app/src/main/java/com/example/shopapp/responses/ProductImageResponse.java
 /app/src/main/java/com/example/shopapp/dtos/OrderDTO.java
 /app/src/main/java/com/example/shopapp/models/Order.java
 /app/src/main/java/com/example/shopapp/services/interfaces/IUserService.java

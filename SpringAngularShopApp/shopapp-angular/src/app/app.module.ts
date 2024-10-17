@@ -38,6 +38,6 @@ import TokenInterceptor from './interceptors/token.interceptor';
       multi: true
     }
   ],
-  bootstrap: [HomeComponent]
+  bootstrap: [ProductDetailComponent]
 })
 export class AppModule { }

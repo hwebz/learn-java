@@ -1,3 +1,5 @@
+com/example/shopapp/responses/ProductImageResponse.class
+com/example/shopapp/responses/ProductImageResponse$ProductImageResponseBuilder.class
 com/example/shopapp/services/RoleService.class
 com/example/shopapp/responses/LoginResponse$LoginResponseBuilder.class
 com/example/shopapp/responses/LoginResponse.class

@@ -1,3 +1,5 @@
+import ProductImage from "./product.image";
+
 export default interface Product {
   name: string;
   price: number;
@@ -8,4 +10,5 @@ export default interface Product {
   updated_at: Date;
   category_id: number;
   url?: string;
+  product_images: ProductImage[];
 }

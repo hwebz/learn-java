@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -27,6 +28,10 @@ public class Product extends BaseEntity {
     private String thumbnail;
 
     private String description;
+
+    @OneToMany
+    @JoinColumn(name = "product_id")
+    private List<ProductImage> productImages;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

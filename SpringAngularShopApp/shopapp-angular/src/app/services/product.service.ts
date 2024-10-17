@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import ProductsResponse from "../responses/products.response";
+import Product from "../models/product.model";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export default class ProductService {
     limit: number,
     categoryId?: number,
     keyword?: string,
-  ): Observable<any> {
+  ): Observable<ProductsResponse> {
     return this.http.get(this.apiUrl, {
       headers: this.headers,
       // By default HttpClient response type is json, it means API returns 200 OK with string message
@@ -31,6 +33,12 @@ export default class ProductService {
         category_id: categoryId ?? '',
         keyword: keyword ?? ''
       }
-    });
+    }) as Observable<ProductsResponse>;
+  }
+
+  getDetailProduct(productId: number): Observable<Product> {
+    return this.http.get(`${this.apiUrl}/${productId}`, {
+      headers: this.headers,
+    }) as Observable<Product>;
   }
 }
