@@ -13,6 +13,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import TokenInterceptor from './interceptors/token.interceptor';
+import { AppComponent } from './app/app.component';
 
 @NgModule({
   declarations: [
@@ -23,14 +24,15 @@ import TokenInterceptor from './interceptors/token.interceptor';
     OrderComponent,
     OrderConfirmationComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     {
@@ -39,6 +41,6 @@ import TokenInterceptor from './interceptors/token.interceptor';
       multi: true
     }
   ],
-  bootstrap: [OrderConfirmationComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

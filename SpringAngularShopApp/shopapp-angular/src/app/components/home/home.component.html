@@ -20,7 +20,7 @@
 <main class="container mt-4">
   <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
       <div class="col" *ngFor="let product of products">
-          <div class="card">
+          <div class="card" (click)="goToProductDetail(product.id)">
               <img src="/api/products/images/{{product.thumbnail}}" class="card-img-top" alt="{{product.name}}">
               <div class="card-body">
                 <h5 class="card-title">{{product.name}}</h5>

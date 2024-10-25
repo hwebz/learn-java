@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import ProductService from '../../services/product.service';
 import Product from '../../models/product.model';
 import CartService from '../../services/cart.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-product-detail',
@@ -15,13 +17,18 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
-    const fakeProductId = 5793;
-    this.cartService.clearCart();
-    this.productService.getDetailProduct(fakeProductId)
+    const productId = this.route.snapshot.paramMap.get('id');
+    if (!productId) {
+      this.location.back();
+    }
+    this.productService.getDetailProduct(Number(productId))
     .subscribe({
       next: (product: any) => {
         this.product = product;
@@ -80,5 +87,9 @@ export class ProductDetailComponent implements OnInit {
     } else {
       this.currentImageIndex = 0;
     }
+  }
+
+  buyNow(): void {
+    this.router.navigate(['/orders']);
   }
 }

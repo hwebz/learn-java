@@ -6,6 +6,7 @@ import formatVNDCurrency from '../../utils/formatCurrency';
 import CategoryService from '../../services/category.service';
 import CategoriesResponse from '../../responses/category.response';
 import Category from '../../models/category.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,11 @@ export class HomeComponent implements OnInit {
   totalCategories: number = 0;
   searchText?: string;
   
-  constructor(private productService: ProductService, private categoryService: CategoryService) {}
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getCategories();
@@ -101,5 +106,10 @@ export class HomeComponent implements OnInit {
   onPageChange(page: number) {
     this.currentPage = page;
     this.getProducts(page, this.itemsPerPage);
+  }
+
+  goToProductDetail(productId: number) {
+    console.log(`Navigating to product detail page for product ${productId}`)
+    this.router.navigate(['/products', productId]);
   }
 }

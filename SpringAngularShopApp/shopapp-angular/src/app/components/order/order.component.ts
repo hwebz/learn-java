@@ -5,6 +5,7 @@ import OrderService from '../../services/order.service';
 import Product, { CartItem } from '../../models/product.model';
 import { CartItemDTO, OrderDTO } from '../../dtos/order.dto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order',
@@ -34,7 +35,8 @@ export class OrderComponent {
     private cartService: CartService,
     private productService: ProductService,
     private orderService: OrderService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {
     this.orderForm = this.fb.group({
       fullname: [this.orderData.fullname, Validators.required],
@@ -89,8 +91,8 @@ export class OrderComponent {
         total_money: this.totalAmount
       }
       this.orderService.placeOrder(this.orderData).subscribe({
-        next: () => {
-          
+        next: (response: any) => {
+          this.router.navigate(['/orders', response.id]);
         },
         complete: () => {
           console.log('order placed')
