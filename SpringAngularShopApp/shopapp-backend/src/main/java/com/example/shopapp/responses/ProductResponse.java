@@ -41,6 +41,7 @@ public class ProductResponse extends BaseResponse {
         }
 
         ProductResponse productResponse = ProductResponse.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())

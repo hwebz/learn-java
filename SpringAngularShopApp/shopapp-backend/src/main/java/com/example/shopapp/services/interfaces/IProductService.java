@@ -7,9 +7,9 @@ import com.example.shopapp.models.Product;
 import com.example.shopapp.responses.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProductService {
     public Product createProduct(ProductDTO productDTO, List<String> imageUrls) throws DataNotFoundException, ProductImageExceededException;
@@ -18,4 +18,5 @@ public interface IProductService {
     Product updateProduct(Long id, ProductDTO productDTO) throws DataNotFoundException;
     void deleteProduct(Long id);
     boolean existsByName(String name);
+    List<ProductResponse> findProductsByIds(List<Long> productIds);
 }

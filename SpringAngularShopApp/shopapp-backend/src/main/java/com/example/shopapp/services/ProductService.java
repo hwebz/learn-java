@@ -70,7 +70,6 @@ public class ProductService implements IProductService {
     public Product getProductById(Long id) throws DataNotFoundException {
         return productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(("Product not found")));
-
     }
 
     @Override
@@ -105,5 +104,10 @@ public class ProductService implements IProductService {
     @Override
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
+    }
+
+    @Override
+    public List<ProductResponse> findProductsByIds(List<Long> productIds) {
+        return productRepository.findProductsByIds(productIds).stream().map(ProductResponse::fromProduct).toList();
     }
 }
