@@ -1,11 +1,12 @@
 package com.example.shopapp.services;
 
+import com.example.shopapp.dtos.CartItemDTO;
 import com.example.shopapp.dtos.OrderDTO;
 import com.example.shopapp.exceptions.DataNotFoundException;
-import com.example.shopapp.models.Order;
-import com.example.shopapp.models.OrderStatus;
-import com.example.shopapp.models.User;
+import com.example.shopapp.models.*;
+import com.example.shopapp.repositories.OrderDetailRepository;
 import com.example.shopapp.repositories.OrderRepository;
+import com.example.shopapp.repositories.ProductRepository;
 import com.example.shopapp.repositories.UserRepository;
 import com.example.shopapp.responses.OrderResponse;
 import com.example.shopapp.responses.ProductResponse;
@@ -15,10 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +25,8 @@ public class OrderService implements IOrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
+    private final ProductRepository productRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     @Override
     @Transactional
@@ -48,8 +48,32 @@ public class OrderService implements IOrderService {
         if (shippingDate.before(new Date())) {
             throw new DataNotFoundException("Shipping date should be in the future");
         }
+        order.setShippingDate(shippingDate);
         order.setActive(true);
+        order.setTotalMoney(orderDTO.getTotalMoney());
         orderRepository.save(order);
+
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        for (CartItemDTO cartItemDTO: orderDTO.getCartItems()) {
+            OrderDetail orderDetail = new OrderDetail();
+            orderDetail.setOrder(order);
+
+            Long productId = cartItemDTO.getProductId();
+            int quantity = cartItemDTO.getQuantity();
+
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new DataNotFoundException("Product not found"));
+
+            orderDetail.setProduct(product);
+            orderDetail.setQuantity(quantity);
+            orderDetail.setTotalMoney(product.getPrice() * quantity);
+            orderDetail.setPrice(product.getPrice());
+
+            orderDetails.add(orderDetail);
+        }
+
+        orderDetailRepository.saveAll(orderDetails);
+
         return modelMapper.map(order, OrderResponse.class);
     }
 
@@ -57,7 +81,7 @@ public class OrderService implements IOrderService {
     public OrderResponse getOrder(Long id) throws DataNotFoundException {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException(("Order not found")));
-        return modelMapper.map(existingOrder, OrderResponse.class);
+        return OrderResponse.fromOrder(existingOrder);
     }
 
     @Override
@@ -91,7 +115,7 @@ public class OrderService implements IOrderService {
         List<Order> orders = orderRepository.findByUserId(userId);
 
         return orders.stream()
-                .map(order -> modelMapper.map(order, OrderResponse.class))
+                .map(OrderResponse::fromOrder)
                 .collect(Collectors.toList());
     }
 }

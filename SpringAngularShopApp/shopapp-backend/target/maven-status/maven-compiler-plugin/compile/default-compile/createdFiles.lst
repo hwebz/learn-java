@@ -11,3 +11,4 @@ com/example/shopapp/responses/CategoryListResponse.class
 com/example/shopapp/configurations/WebSecurityConfig$1.class
 com/example/shopapp/services/interfaces/IRoleService.class
 com/example/shopapp/responses/RegisterResponse.class
+com/example/shopapp/dtos/CartItemDTO.class

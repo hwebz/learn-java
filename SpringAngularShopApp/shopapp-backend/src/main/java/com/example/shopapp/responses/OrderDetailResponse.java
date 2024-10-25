@@ -15,10 +15,10 @@ public class OrderDetailResponse {
 
     @JsonProperty("order_id")
     private Long orderId;
-
-    @JsonProperty("product_id")
-    private Long productId;
     private Float price;
+
+    @JsonProperty("product")
+    private ProductResponse product;
 
     @JsonProperty("number_of_products")
     private int quantity;
@@ -31,7 +31,7 @@ public class OrderDetailResponse {
         return OrderDetailResponse.builder()
                 .id(orderDetail.getId())
                 .orderId(orderDetail.getOrder().getId())
-                .productId(orderDetail.getProduct().getId())
+                .product(ProductResponse.fromProduct(orderDetail.getProduct()))
                 .price(orderDetail.getPrice())
                 .quantity(orderDetail.getQuantity())
                 .totalMoney(orderDetail.getTotalMoney())

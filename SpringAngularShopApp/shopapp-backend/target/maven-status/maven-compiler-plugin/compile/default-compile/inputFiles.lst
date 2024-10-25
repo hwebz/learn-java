@@ -8,6 +8,7 @@
 /app/src/main/java/com/example/shopapp/configurations/MapperConfiguration.java
 /app/src/main/java/com/example/shopapp/services/interfaces/ICategoryService.java
 /app/src/main/java/com/example/shopapp/responses/RegisterResponse.java
+/app/src/main/java/com/example/shopapp/dtos/CartItemDTO.java
 /app/src/main/java/com/example/shopapp/repositories/RoleRepository.java
 /app/src/main/java/com/example/shopapp/models/SocialAccount.java
 /app/src/main/java/com/example/shopapp/controllers/UserController.java

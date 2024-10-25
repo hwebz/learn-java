@@ -1,13 +1,14 @@
 package com.example.shopapp.responses;
 
 import com.example.shopapp.models.Order;
-import com.example.shopapp.models.Product;
+import com.example.shopapp.models.OrderDetail;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @Getter
@@ -22,6 +23,9 @@ public class OrderResponse extends BaseResponse {
 
 //    private User user;
 
+    @JsonProperty("email")
+    private String email;
+
     @JsonProperty("fullname")
     private String fullName;
 
@@ -32,7 +36,7 @@ public class OrderResponse extends BaseResponse {
     private String note;
 
     @JsonProperty("order_date")
-    private LocalDateTime orderDate;
+    private Date orderDate;
 
     private String status;
 
@@ -55,4 +59,29 @@ public class OrderResponse extends BaseResponse {
     private String paymentMethod;
 
     private Boolean active;
+
+    @JsonProperty("order_details")
+    private List<OrderDetailResponse> orderDetails;
+
+    public static OrderResponse fromOrder(Order order) {
+        return OrderResponse.builder()
+                .id(order.getId())
+                .userId(order.getUser().getId())
+                .fullName(order.getFullName())
+                .phoneNumber(order.getPhoneNumber())
+                .email(order.getEmail())
+                .address(order.getAddress())
+                .note(order.getNote())
+                .orderDate(order.getOrderDate())
+                .status(order.getStatus())
+                .totalMoney(order.getTotalMoney())
+                .shippingMethod(order.getShippingMethod())
+                .shippingAddress(order.getShippingAddress())
+                .trackingNumber(order.getTrackingNumber())
+                .paymentMethod(order.getPaymentMethod())
+                .active(order.getActive())
+                .shippingDate(order.getShippingDate())
+                .orderDetails(order.getOrderDetails().stream().map(OrderDetailResponse::fromOrderDetail).toList())
+                .build();
+    }
 }

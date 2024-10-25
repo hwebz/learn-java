@@ -10,7 +10,7 @@ import { OrderComponent } from './components/order/order.component';
 import { OrderConfirmationComponent } from './components/order-confirmation/order-confirmation.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import TokenInterceptor from './interceptors/token.interceptor';
 
@@ -29,7 +29,8 @@ import TokenInterceptor from './interceptors/token.interceptor';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
     {

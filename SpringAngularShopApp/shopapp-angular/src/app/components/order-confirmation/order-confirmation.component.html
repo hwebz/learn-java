@@ -1,11 +1,26 @@
 <app-header />
 
-<div class="container mt-5">
+<div class="container mt-5" *ngIf="orderResponse">
   <!-- Confirmation Text -->
   <div class="text-center mb-4">
       <h2>Thank You for Your Purchase!</h2>
       <p>Your order has been confirmed. Here are the details of your purchase:</p>
   </div>
+
+    <!-- Order Information -->
+    <div class="order-info mb-4">
+        <h4>Order Information</h4>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Full Name:</strong> {{ orderResponse.fullname }}</li>
+            <li class="list-group-item"><strong>Email:</strong> {{ orderResponse.email }}</li>
+            <li class="list-group-item"><strong>Phone Number:</strong> {{ orderResponse.phone_number }}</li>
+            <li class="list-group-item"><strong>Address:</strong> {{ orderResponse.address }}</li>
+            <li class="list-group-item"><strong>Order date:</strong> {{ orderResponse.order_date | date: 'dd/MM/yyyy HH:mm:ss' }}</li>
+            <li class="list-group-item"><strong>Shipping date:</strong> {{ orderResponse.shipping_date | date: 'dd/MM/yyyy HH:mm:ss' }}</li>
+            <li class="list-group-item text-capitalize"><strong>Shipping method:</strong> {{ orderResponse.shipping_method }}</li>
+            <li class="list-group-item text-uppercase"><strong>Payment method:</strong> {{ orderResponse.payment_method }}</li>
+        </ul>
+    </div>
 
   <!-- Product List with Thumbnails -->
   <table class="table">
@@ -20,7 +35,7 @@
           </tr>
       </thead>
       <tbody>
-          <ng-container *ngFor="let item of cartItems; let i = index">
+          <ng-container *ngFor="let item of orderResponse.order_details; let i = index">
             <tr>
                 <th scope="row">#{{ i + 1 }}</th>
                 <td width="10%"><img src="/api/products/images/{{item.product.thumbnail}}" [alt]="item.product.name" class="img-thumbnail"></td>
@@ -33,21 +48,10 @@
       </tbody>
   </table>
 
-    <!-- Coupon Code Input -->
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-6">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Enter coupon code" aria-label="Coupon code">
-                <button class="btn btn-outline-secondary" type="button">Apply Coupon</button>
-            </div>
-        </div>
-    </div>
-
   <!-- Continue Shopping Button -->
-   <p class="mb-3">Total: {{totalAmount | currency}}</p>
+   <p class="mb-3">Total: {{orderResponse.total_money | currency}}</p>
   <div class="d-flex justify-content-center">
       <button type="button" class="btn btn-secondary">Continue Shopping</button>
-      <button type="button" class="btn btn-primary mx-3">Checkout</button>
   </div>
 </div>
 

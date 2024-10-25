@@ -15,5 +15,6 @@ export default interface Product {
 }
 
 export interface CartItem {
-  product: Product, quantity: number
+  product: Product,
+  quantity: number
 }
