@@ -41,4 +41,11 @@ export default class ProductService {
       headers: this.headers,
     }) as Observable<Product>;
   }
+
+  getProductsByIds(productIds: number[]): Observable<Product[]> {
+    return this.http.get(`${this.apiUrl}/by-ids`, {
+      headers: this.headers,
+      params: { ids: productIds.join(',') }
+    }) as Observable<Product[]>;
+  }
 }

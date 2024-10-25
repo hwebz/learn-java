@@ -13,3 +13,7 @@ export default interface Product {
   product_images: ProductImage[];
   id: number;
 }
+
+export interface CartItem {
+  product: Product, quantity: number
+}

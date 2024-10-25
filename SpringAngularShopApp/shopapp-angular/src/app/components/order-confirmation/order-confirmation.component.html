@@ -16,29 +16,38 @@
               <th scope="col">Name</th>
               <th scope="col">Quantity</th>
               <th scope="col">Price</th>
+              <th scope="col">Total</th>
           </tr>
       </thead>
       <tbody>
-          <tr>
-              <th scope="row">1</th>
-              <td><img src="https://via.placeholder.com/100x60?text=Product+1" alt="Product 1" class="img-thumbnail"></td>
-              <td>Product 1</td>
-              <td>1</td>
-              <td>$10.00</td>
-          </tr>
-          <tr>
-              <th scope="row">2</th>
-              <td><img src="https://via.placeholder.com/100x60?text=Product+2" alt="Product 2" class="img-thumbnail"></td>
-              <td>Product 2</td>
-              <td>2</td>
-              <td>$20.00</td>
-          </tr>
+          <ng-container *ngFor="let item of cartItems; let i = index">
+            <tr>
+                <th scope="row">#{{ i + 1 }}</th>
+                <td width="10%"><img src="/api/products/images/{{item.product.thumbnail}}" [alt]="item.product.name" class="img-thumbnail"></td>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.product.price | currency }}</td>
+                <td>{{ item.product.price * item.quantity | currency }}</td>
+            </tr>
+          </ng-container>
       </tbody>
   </table>
 
+    <!-- Coupon Code Input -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Enter coupon code" aria-label="Coupon code">
+                <button class="btn btn-outline-secondary" type="button">Apply Coupon</button>
+            </div>
+        </div>
+    </div>
+
   <!-- Continue Shopping Button -->
+   <p class="mb-3">Total: {{totalAmount | currency}}</p>
   <div class="d-flex justify-content-center">
-      <button type="button" class="btn btn-primary">Continue Shopping</button>
+      <button type="button" class="btn btn-secondary">Continue Shopping</button>
+      <button type="button" class="btn btn-primary mx-3">Checkout</button>
   </div>
 </div>
 
