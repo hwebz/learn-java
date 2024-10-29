@@ -63,10 +63,9 @@ export class LoginComponent implements OnInit {
     this.userService.login(loginData)
     .subscribe({
       next: (response: LoginResponse) => {
-        alert(response.message);
         if (response.success) {
           this.tokenService.setToken(response.token);
-          this.router.navigate(['/home'])
+          this.router.navigate(['/'])
         }
       },
       complete: () => {

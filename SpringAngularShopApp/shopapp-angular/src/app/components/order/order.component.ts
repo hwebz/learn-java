@@ -6,6 +6,7 @@ import Product, { CartItem } from '../../models/product.model';
 import { CartItemDTO, OrderDTO } from '../../dtos/order.dto';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import TokenService from '../../services/token.service';
 
 @Component({
   selector: 'app-order',
@@ -36,7 +37,8 @@ export class OrderComponent {
     private productService: ProductService,
     private orderService: OrderService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private tokenService: TokenService
   ) {
     this.orderForm = this.fb.group({
       fullname: [this.orderData.fullname, Validators.required],
@@ -53,6 +55,7 @@ export class OrderComponent {
   ngOnInit(): void {
       const cart = this.cartService.getCart();
       const productIds = Array.from(cart.keys());
+      this.orderData.user_id = this.tokenService.getUserId();
 
       this.productService.getProductsByIds(productIds).subscribe({
         next: (products: Product[]) => {

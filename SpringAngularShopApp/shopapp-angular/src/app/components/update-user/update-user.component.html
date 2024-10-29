@@ -1,0 +1,119 @@
+<app-header />
+
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <div class="container mt-4">
+    <h3>Update user info</h3>
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Full Name</label>
+      <input
+        type="text"
+        formControlName="fullname"
+        [class.is-invalid]="isNameInvalid"
+        placeholder="Enter your name"
+        class="form-control"
+      />
+      <div
+        *ngIf="isNameInvalid"
+        class="text-danger"
+      >
+        Name is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="phoneNumber" class="form-label">Phone Number</label>
+      <input
+        type="tel"
+        formControlName="phone_number"
+        [class.is-invalid]="isPhoneInvalid"
+        placeholder="Enter your phone number"
+        class="form-control"
+      />
+      <div
+        *ngIf="isPhoneInvalid"
+        class="text-danger"
+      >
+      Phone number is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="address" class="form-label">Address</label>
+      <input
+        type="text"
+        formControlName="address"
+        [class.is-invalid]="isAddressInvalid"
+        placeholder="Enter your address"
+        class="form-control"
+      />
+      <div
+        *ngIf="isAddressInvalid"
+        class="text-danger"
+      >
+      Address is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="dob" class="form-label">Date of Birth</label>
+      <input
+        type="date"
+        formControlName="date_of_birth"
+        [class.is-invalid]="isDateFuture || isDateInvalid"
+        class="form-control"
+      />
+      <div
+        *ngIf="isDateFuture || isDateInvalid"
+        class="text-danger"
+      >
+      Date of birth is invalid.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="facebookId" class="form-label">Facebook Account ID</label>
+      <input
+        type="number"
+        formControlName="facebook_account_id"
+        [class.is-invalid]="isFacebookInvalid"
+        placeholder="Enter your Facebook ID"
+        class="form-control"
+      />
+      <div
+        *ngIf="isFacebookInvalid"
+        class="text-danger"
+      >
+      Facebook ID is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="googleId" class="form-label">Google Account ID</label>
+      <input
+        type="number"
+        formControlName="google_account_id"
+        [class.is-invalid]="isGoogleInvalid"
+        placeholder="Enter your Google ID"
+        class="form-control"
+      />
+      <div
+        *ngIf="isGoogleInvalid"
+        class="text-danger"
+      >
+      Google ID is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        formControlName="password"
+        [class.is-invalid]="isPasswordInvalid"
+        placeholder="Enter your password"
+        class="form-control"
+      />
+      <div
+        *ngIf="isPasswordInvalid"
+        class="text-danger"
+      >
+      Password is required.
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+  </div>
+</form>

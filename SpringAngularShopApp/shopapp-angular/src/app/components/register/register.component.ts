@@ -71,7 +71,6 @@ export class RegisterComponent {
     this.userService.register(registerData)
     .subscribe({
       next: (response: RegisterResponse) => {
-        alert(response.message);
         if (response.success) {
           this.router.navigate(['/login'])
         }

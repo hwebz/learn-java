@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import TokenInterceptor from './interceptors/token.interceptor';
 import { AppComponent } from './app/app.component';
+import { UpdateUserComponent } from './components/update-user/update-user.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AppComponent } from './app/app.component';
     OrderConfirmationComponent,
     LoginComponent,
     RegisterComponent,
-    AppComponent
+    AppComponent,
+    UpdateUserComponent
   ],
   imports: [
     BrowserModule,

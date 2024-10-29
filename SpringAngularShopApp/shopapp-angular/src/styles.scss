@@ -14,3 +14,8 @@
 .pagination .page-item {
   cursor: pointer;
 }
+
+.nav-link.active {
+  background: #e1e1e1;
+  border-radius: 20px;
+}

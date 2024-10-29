@@ -15,20 +15,33 @@
               <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" routerLink="/">Products</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" routerLink="/">Notifications</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" routerLink="/orders">Cart</a>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link" routerLinkActive="active" routerLink="/" [routerLinkActiveOptions]="{ exact: true }">Products</a>
                 </li>
-                  <li class="nav-item">
-                    <a class="nav-link" routerLink="/login">Login</a>
+                <li class="nav-item" >
+                    <a class="nav-link" routerLinkActive="active" routerLink="/notifications">Notifications</a>
                 </li>
-              </ul>
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" routerLink="/orders">Cart</a>
+              </li>
+                <li class="nav-item">
+                  <a class="nav-link" routerLinkActive="active" routerLink="/login">Login</a>
+              </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ userResponse?.fullname}}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                  <li><a class="dropdown-item" routerLink="/update-user">My profile</a></li>
+                  <li><a class="dropdown-item" routerLink="/order">My orders</a></li>
+                  <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
           </div>
       </div>
   </nav>

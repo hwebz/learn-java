@@ -20,7 +20,7 @@
             placeholder="Enter your name"
           >
           <div
-            *ngIf="orderForm.get('fullname')!.invalid && (orderForm.get('fullname')!.dirty || orderForm.get('buyerName')!.touched)"
+            *ngIf="orderForm.get('fullname')!.invalid && (orderForm.get('fullname')!.dirty || orderForm.get('fullname')!.touched)"
             class="text-danger"
           >
             Name is required.
