@@ -7,6 +7,7 @@ import LoginResponse from '../../responses/user/login.response';
 import TokenService from '../../services/token.service';
 import RoleResponse from '../../responses/role.response';
 import RoleService from '../../services/role.service';
+import { UserResponse } from '../../responses/user/user.reponse';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
   rememberMe: boolean = false;
   selectedRole?: RoleResponse;
   roles: RoleResponse[] = [];
+  userResponse?: UserResponse | null;
 
   constructor(
     private router: Router,
@@ -64,8 +66,27 @@ export class LoginComponent implements OnInit {
     .subscribe({
       next: (response: LoginResponse) => {
         if (response.success) {
+          if (!this.rememberMe) return
           this.tokenService.setToken(response.token);
-          this.router.navigate(['/'])
+          
+          this.userService.getUserDetails().subscribe({
+            next: (user: UserResponse) => {
+              this.userResponse = user;
+              this.userService.saveUserToLocalStorage(user);
+
+              if (this.userResponse?.role?.name === 'Administrator') {
+                this.router.navigate(['/admin']);
+              } else {
+                this.router.navigate(['/']);
+              }
+            },
+            complete: () => {
+              console.log('fetch user completed')
+            },
+            error: (e: any) => {
+              alert(e.error)
+            }
+          });
         }
       },
       complete: () => {

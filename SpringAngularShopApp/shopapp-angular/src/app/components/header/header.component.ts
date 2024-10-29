@@ -19,19 +19,20 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.userService.getUserDetails().subscribe({
-      next: (user: UserResponse) => {
-        console.log(user)
-        this.userResponse = user;
-        this.userService.saveUserToLocalStorage(user);
-      },
-      complete: () => {
-        console.log('fetch user completed')
-      },
-      error: (e: any) => {
-        alert(e.error)
-      }
-    });
+    this.userResponse = this.userService.getUserFromLocalStorage();
+    // this.userService.getUserDetails().subscribe({
+    //   next: (user: UserResponse) => {
+    //     console.log(user)
+    //     this.userResponse = user;
+    //     this.userService.saveUserToLocalStorage(user);
+    //   },
+    //   complete: () => {
+    //     console.log('fetch user completed')
+    //   },
+    //   error: (e: any) => {
+    //     alert(e.error)
+    //   }
+    // });
   }
 
   logout() {

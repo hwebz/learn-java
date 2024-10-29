@@ -78,4 +78,9 @@ export class UserService {
     this.tokenService.removeToken();
     localStorage.removeItem('user');
   }
+
+  isAdmin(): boolean {
+    const user = this.getUserFromLocalStorage();
+    return user?.role?.name === 'Administrator';
+  }
 }
