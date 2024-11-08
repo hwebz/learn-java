@@ -2,7 +2,6 @@ package com.example.shopapp.filters;
 
 import com.example.shopapp.components.JwtTokenUtil;
 import com.example.shopapp.models.User;
-import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -55,7 +53,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             final String token = authHeader.replace("Bearer ", "");
-            final String phoneNumber = jwtTokenUtil.getPhoneNunber(token);
+            final String phoneNumber = jwtTokenUtil.getPhoneNumber(token);
             if (phoneNumber == null) {
                 response.setStatus(HttpStatus.BAD_REQUEST.value());
             }
@@ -82,14 +80,20 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                 Pair.of(apiPrefix + "/categories", "GET"),
                 Pair.of(apiPrefix + "/users/login", "POST"),
                 Pair.of(apiPrefix + "/users/register", "POST"),
-                Pair.of(apiPrefix + "/roles", "GET"),
-                Pair.of(apiPrefix + "/orders", "GET")
+                Pair.of(apiPrefix + "/roles", "GET")
         );
+
+        String requestPath = request.getServletPath();
+        String requestMethod = request.getMethod();
+
+        if (requestPath.equals(String.format("%s/orders", apiPrefix)) && requestMethod.equals("GET")) {
+            return true;
+        }
 
         for (Pair<String, String> bypassToken: bypassTokens) {
             if (
-                    request.getServletPath().contains(bypassToken.getLeft()) &&
-                            request.getMethod().equals(bypassToken.getRight())
+                    requestPath.contains(bypassToken.getLeft()) &&
+                            requestMethod.equals(bypassToken.getRight())
             ) {
                 return true;
             }

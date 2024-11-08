@@ -25,11 +25,13 @@
 /app/src/main/java/com/example/shopapp/services/interfaces/IOrderDetailService.java
 /app/src/main/java/com/example/shopapp/responses/OrderResponse.java
 /app/src/main/java/com/example/shopapp/controllers/ProductController.java
+/app/src/main/java/com/example/shopapp/responses/OrderListResponse.java
 /app/src/main/java/com/example/shopapp/ShopApplication.java
 /app/src/main/java/com/example/shopapp/responses/BaseResponse.java
 /app/src/main/java/com/example/shopapp/filters/JwtTokenFilter.java
 /app/src/main/java/com/example/shopapp/services/UserService.java
 /app/src/main/java/com/example/shopapp/exceptions/ProductImageExceededException.java
+/app/src/main/java/com/example/shopapp/responses/UserResponse.java
 /app/src/main/java/com/example/shopapp/responses/LoginResponse.java
 /app/src/main/java/com/example/shopapp/services/OrderDetailService.java
 /app/src/main/java/com/example/shopapp/services/interfaces/IRoleService.java

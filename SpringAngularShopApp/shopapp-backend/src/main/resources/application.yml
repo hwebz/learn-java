@@ -33,3 +33,5 @@ api:
 jwt:
   expiration: 2592000 # 30 days
   secret: DemoSprintBoot2024AndIDontWantThisSecretKeyHaveToBeLongerThanIThink
+
+logging.level.org.springframework.security: DEBUG

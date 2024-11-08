@@ -4,20 +4,14 @@ import com.example.shopapp.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +29,7 @@ public class JwtTokenUtil {
     public String generateToken(User user) throws Exception {
         Map<String, Object> claims = new HashMap<>();
         claims.put("phoneNumber", user.getPhoneNumber());
+        claims.put("userId", user.getId());
 
         try {
             return Jwts.builder()
@@ -75,12 +70,13 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
-    public String getPhoneNunber(String token) {
-        return getClaim(token, Claims::getSubject);
+    public String getPhoneNumber(String token) {
+        var claims = getClaim(token, Claims::getSubject);
+        return claims;
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        String phoneNumber = getPhoneNunber(token);
+        String phoneNumber = getPhoneNumber(token);
         return phoneNumber.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 }

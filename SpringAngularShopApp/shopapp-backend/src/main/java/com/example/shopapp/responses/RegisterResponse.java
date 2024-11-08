@@ -11,4 +11,5 @@ import lombok.*;
 public class RegisterResponse {
     private boolean success;
     private String message;
+    private UserResponse user;
 }

@@ -4,13 +4,19 @@ import com.example.shopapp.dtos.OrderDTO;
 import com.example.shopapp.dtos.ProductDTO;
 import com.example.shopapp.exceptions.DataNotFoundException;
 import com.example.shopapp.repositories.ProductRepository;
+import com.example.shopapp.responses.OrderListResponse;
 import com.example.shopapp.responses.OrderResponse;
+import com.example.shopapp.responses.ProductResponse;
 import com.example.shopapp.services.interfaces.IOrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -97,5 +103,23 @@ public class OrderController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/get-orders-by-key")
+//    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    public ResponseEntity<?> getOrdersByKey(
+        @RequestParam(value = "keyword", defaultValue = "") String keyword,
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "limit", defaultValue = "10") int limit
+    ) {
+        PageRequest pageRequest = PageRequest.of(
+            page,
+            limit,
+            Sort.by("orderDate").descending()
+        );
+        Page<OrderResponse> ordersPage = orderService.getOrdersByKeyword(keyword, pageRequest);
+        int totalPages = ordersPage.getTotalPages();
+        List<OrderResponse> orders = ordersPage.getContent();
+        return ResponseEntity.ok(OrderListResponse.builder().orders(orders).totalPages(totalPages).build());
     }
 }

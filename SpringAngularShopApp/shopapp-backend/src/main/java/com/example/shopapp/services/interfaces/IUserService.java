@@ -8,4 +8,6 @@ import org.springframework.stereotype.Service;
 public interface IUserService {
     User createUser(UserDTO userDTO) throws Exception;
     String login(String phoneNumber, String password, Long roleId)  throws DataNotFoundException;
+    User getUserDetailsFromToken(String token) throws Exception;
+    User updateUser(UserDTO updatedUserDTO, Long userId) throws Exception;
 }

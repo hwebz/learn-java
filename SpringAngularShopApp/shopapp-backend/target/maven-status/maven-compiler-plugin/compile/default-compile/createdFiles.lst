@@ -1,11 +1,15 @@
+com/example/shopapp/responses/UserResponse$UserResponseBuilder.class
 com/example/shopapp/responses/ProductImageResponse.class
 com/example/shopapp/responses/ProductImageResponse$ProductImageResponseBuilder.class
 com/example/shopapp/services/RoleService.class
 com/example/shopapp/responses/LoginResponse$LoginResponseBuilder.class
 com/example/shopapp/responses/LoginResponse.class
 com/example/shopapp/controllers/RoleController.class
+com/example/shopapp/responses/OrderListResponse.class
+com/example/shopapp/responses/OrderListResponse$OrderListResponseBuilder.class
 com/example/shopapp/responses/CategoryListResponse$CategoryListResponseBuilder.class
 com/example/shopapp/responses/RegisterResponse$RegisterResponseBuilder.class
+com/example/shopapp/responses/UserResponse.class
 com/example/shopapp/ShopApplication.class
 com/example/shopapp/responses/CategoryListResponse.class
 com/example/shopapp/configurations/WebSecurityConfig$1.class
