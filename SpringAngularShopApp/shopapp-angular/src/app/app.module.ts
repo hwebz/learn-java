@@ -16,6 +16,7 @@ import TokenInterceptor from './interceptors/token.interceptor';
 import { AppComponent } from './app/app.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { AdminModule } from './admin/admin.module';
+import { AdminHeaderComponent } from './components/admin-header/admin-header.component';
 
 @NgModule({
   declarations: [

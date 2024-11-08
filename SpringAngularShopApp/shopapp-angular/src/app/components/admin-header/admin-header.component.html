@@ -9,7 +9,7 @@
                 <path d="M1 1h4l2.6 13h11l3-8H7"></path>
                 <path d="M7 6h15"></path>
             </svg>
-            <span>ShopApp</span>
+            <span>Admin</span>
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -17,13 +17,13 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-grow-1">
                 <li class="nav-item">
-                    <a class="nav-link" routerLinkActive="active" routerLink="/" [routerLinkActiveOptions]="{ exact: true }">Products</a>
+                    <a class="nav-link" routerLinkActive="active" routerLink="/admin/orders">Orders</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" routerLinkActive="active" routerLink="/orders">Cart</a>
+                  <a class="nav-link" routerLinkActive="active" routerLink="/admin/products">Products</a>
               </li>
                 <li class="nav-item">
-                  <a class="nav-link" routerLinkActive="active" routerLink="/login">Login</a>
+                  <a class="nav-link" routerLinkActive="active" routerLink="/admin/categories">Categories</a>
               </li>
             </ul>
 
@@ -33,8 +33,6 @@
                   {{ userResponse?.fullname}}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                  <li><a class="dropdown-item" routerLink="/update-user">My profile</a></li>
-                  <li><a class="dropdown-item" routerLink="/order">My orders</a></li>
                   <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
                 </ul>
               </li>

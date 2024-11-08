@@ -28,7 +28,7 @@ export default class ProductService {
       // Otherwise, you can use 'text' to prevent that error
       // responseType: 'text'
       params: {
-        page,
+        page: page - 1,
         limit,
         category_id: categoryId ?? '',
         keyword: keyword ?? ''

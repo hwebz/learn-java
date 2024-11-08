@@ -66,8 +66,9 @@ export class LoginComponent implements OnInit {
     .subscribe({
       next: (response: LoginResponse) => {
         if (response.success) {
-          if (!this.rememberMe) return
-          this.tokenService.setToken(response.token);
+          if (this.rememberMe) {
+            this.tokenService.setToken(response.token);
+          }
           
           this.userService.getUserDetails().subscribe({
             next: (user: UserResponse) => {
