@@ -21,8 +21,8 @@
           <td>{{ order.total_money | currency }}</td>
           <td>
             <div class="d-flex gap-2">
-              <button class="btn btn-primary btn-sm mr-2">View</button>
-              <button class="btn btn-danger btn-sm">Delete</button>
+              <button class="btn btn-primary btn-sm mr-2" (click)="viewOrder(order.id)">View</button>
+              <button class="btn btn-danger btn-sm" (click)="deleteOrder(order.id)">Delete</button>
             </div>
           </td>
         </tr>

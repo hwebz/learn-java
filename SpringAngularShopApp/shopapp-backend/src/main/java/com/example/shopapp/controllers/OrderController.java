@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -97,7 +98,7 @@ public class OrderController {
     public ResponseEntity<?> deleteOrder(@Valid @PathVariable("id") Long id) {
         try {
             orderService.deleteOrder(id);
-            return ResponseEntity.ok("Order deleted successfully");
+            return ResponseEntity.ok(Collections.singletonMap("message", "Order deleted successfully"));
         } catch (DataNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {

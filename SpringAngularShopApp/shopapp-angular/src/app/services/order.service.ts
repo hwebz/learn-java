@@ -34,4 +34,8 @@ export default class OrderService {
 
     return this.http.get<OrdersResponse>(this.apiGetAllOrders, { params })
   }
+
+  deleteOrder(orderId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${orderId}`) as Observable<any>;
+  }
 }

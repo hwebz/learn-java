@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import Order from '../../models/order.model';
 import OrderService from '../../services/order.service';
 import OrdersResponse from '../../responses/orders.response';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-admin',
@@ -19,6 +20,7 @@ export class OrderAdminComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -69,5 +71,27 @@ export class OrderAdminComponent implements OnInit {
   onPageChange(page: number) {
     this.currentPage = page;
     this.getAllOrders(this.keyword, page, this.itemsPerPage);
+  }
+
+  viewOrder(id: number) {
+    console.log(`Navigating to order detail page for order ${id}`)
+    this.router.navigate(['/orders', id]);
+  }
+
+  deleteOrder(id: number) {
+    console.log(`Deleting order ${id}`)
+    this.orderService.deleteOrder(id)
+    .subscribe({
+      next: () => {
+        alert('Order deleted successfully');
+        this.getAllOrders(this.keyword, this.currentPage, this.itemsPerPage);
+      },
+      complete: () => {
+        console.log('delete order completed')
+      },
+      error: (e: any) => {
+        console.log(e.error)
+      }
+    });
   }
 }
