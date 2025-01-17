@@ -1,10 +1,14 @@
 package com.hwebz.dreamshops.responses;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Getter
+@Setter
 @Data
 public class ProductResponse {
     private Long id;
