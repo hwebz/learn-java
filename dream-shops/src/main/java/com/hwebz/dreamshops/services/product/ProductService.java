@@ -1,5 +1,6 @@
 package com.hwebz.dreamshops.services.product;
 
+import com.hwebz.dreamshops.exception.AlreadyExistsException;
 import com.hwebz.dreamshops.exception.ResourceNotFoundException;
 import com.hwebz.dreamshops.models.Category;
 import com.hwebz.dreamshops.models.Image;
@@ -28,6 +29,10 @@ public class ProductService implements IProductService{
 
     @Override
     public Product addProduct(AddProductRequest productRequest) {
+        if (productExists(productRequest.getName(), productRequest.getBrand())) {
+            throw new AlreadyExistsException(String.format("Product %s %s already exists", productRequest.getBrand(), productRequest.getName()));
+        }
+
         // check if the category is found in the DB
         // If Yes, set is as the new product category
         // If No, the save it as a new category
@@ -48,6 +53,10 @@ public class ProductService implements IProductService{
             productRequest.getInventory(),
             category
         );
+    }
+
+    private boolean productExists(String name, String brand) {
+        return productRepository.existsByNameAndBrand(name, brand);
     }
 
     @Override

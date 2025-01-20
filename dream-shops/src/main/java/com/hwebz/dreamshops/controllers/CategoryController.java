@@ -9,6 +9,7 @@ import com.hwebz.dreamshops.services.category.ICategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<ApiResponse> addCategory(@RequestBody AddOrUpdateCategoryRequest category) {
         try {
@@ -67,6 +69,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{categoryId}")
     public ResponseEntity<ApiResponse> updateCategory(@RequestBody AddOrUpdateCategoryRequest category, @PathVariable Long categoryId) {
         try {
@@ -81,6 +84,7 @@ public class CategoryController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("{categoryId}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long categoryId) {
         try {

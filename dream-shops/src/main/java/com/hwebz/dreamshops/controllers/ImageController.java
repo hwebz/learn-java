@@ -5,7 +5,6 @@ import com.hwebz.dreamshops.exception.ResourceNotFoundException;
 import com.hwebz.dreamshops.models.Image;
 import com.hwebz.dreamshops.responses.ApiResponse;
 import com.hwebz.dreamshops.services.image.IImageService;
-import com.sun.net.httpserver.HttpsServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -13,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,6 +54,7 @@ public class ImageController {
         }
     }
 
+    @PreAuthorize("hasAnyRole()")
     @PutMapping("{imageId}")
     public ResponseEntity<ApiResponse> updateImage(@PathVariable Long imageId, @RequestBody MultipartFile file) {
         try {
@@ -66,6 +67,7 @@ public class ImageController {
         }
     }
 
+    @PreAuthorize("hasAnyRole()")
     @DeleteMapping("{imageId}")
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) {
         try {

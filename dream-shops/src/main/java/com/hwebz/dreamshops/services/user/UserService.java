@@ -9,6 +9,9 @@ import com.hwebz.dreamshops.requests.CreateUserRequest;
 import com.hwebz.dreamshops.requests.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +21,7 @@ import java.util.Optional;
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDTO getUserById(Long userId) {
@@ -33,7 +37,7 @@ public class UserService implements IUserService {
                     user.setFirstName(mu.getFirstName());
                     user.setLastName(mu.getLastName());
                     user.setEmail(mu.getEmail());
-                    user.setPassword(mu.getPassword());
+                    user.setPassword(passwordEncoder.encode(mu.getPassword()));
                     return userRepository.save(user);
                 }).map(this::convertToDTO)
                 .orElseThrow(() -> new AlreadyExistsException("User is already exists"));
@@ -59,5 +63,13 @@ public class UserService implements IUserService {
     @Override
     public UserDTO convertToDTO(User user) {
         return modelMapper.map(user, UserDTO.class);
+    }
+
+    @Override
+    public UserDTO getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User authenticatedUser = userRepository.findByEmail(email);
+        return convertToDTO(authenticatedUser);
     }
 }

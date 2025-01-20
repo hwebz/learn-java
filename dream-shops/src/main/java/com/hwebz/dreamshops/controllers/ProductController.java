@@ -1,5 +1,6 @@
 package com.hwebz.dreamshops.controllers;
 
+import com.hwebz.dreamshops.exception.AlreadyExistsException;
 import com.hwebz.dreamshops.exception.ResourceNotFoundException;
 import com.hwebz.dreamshops.models.Product;
 import com.hwebz.dreamshops.requests.AddProductRequest;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,18 +77,23 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody @Valid AddProductRequest product) {
         try {
             Product theProduct = productService.addProduct(product);
             ProductResponse productResponse = productService.convertToResponse(theProduct);
             return ResponseEntity.ok(new ApiResponse(true, "Success", productResponse));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ApiResponse(false, e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(false, "Error: " + e.getMessage(), null));
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("{productId}")
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable Long productId, @RequestBody ProductUpdateRequest product) {
         try {
@@ -102,6 +109,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("{productId}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) {
         try {

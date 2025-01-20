@@ -9,6 +9,7 @@ import com.hwebz.dreamshops.services.cart.ICartItemService;
 import com.hwebz.dreamshops.services.cart.ICartService;
 import com.hwebz.dreamshops.services.user.IUserService;
 import com.hwebz.dreamshops.services.user.UserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,13 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> addItemToCard(
 //            @RequestParam(required = false) Long cartId,
             @RequestParam Long productId,
-            @RequestParam Integer quantity,
-            @RequestParam Long userId
+            @RequestParam Integer quantity
+//            @RequestParam Long userId
     ) {
         try {
-            UserDTO userDTO = userService.getUserById(userId);
+//            UserDTO userDTO = userService.getUserById(userId);
 //            if (cartId == null) {
+            UserDTO userDTO = userService.getAuthenticatedUser();
 //                cartId = cartService.initializeNewCart();
 //            }
             Cart cart = cartService.initializeNewCart(userDTO);
@@ -39,6 +41,8 @@ public class CartItemController {
             return ResponseEntity.ok(new ApiResponse(true, "Add item success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(false, e.getMessage(), null));
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(false, e.getMessage(), null));
         }
     }
 
