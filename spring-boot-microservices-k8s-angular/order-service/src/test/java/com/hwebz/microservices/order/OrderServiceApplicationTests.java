@@ -1,5 +1,6 @@
 package com.hwebz.microservices.order;
 
+import com.hwebz.microservices.order.stubs.InventoryClientStub;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +40,7 @@ class OrderServiceApplicationTests {
 			   "quantity": 1
 		   }
 		""";
+		InventoryClientStub.stubInventoryCall("iphone_15", 1);
 
 		RestAssured.given()
 				.contentType("application/json")
